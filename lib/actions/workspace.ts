@@ -37,17 +37,17 @@ export async function createWorkspace(formData: FormData) {
 export async function getUserWorkspaces() {
   const supabase = await createClient();
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
 
-  if (!session?.user) {
+  if (!user) {
     return [];
   }
 
   const { data: workspaces } = await supabase
     .from("workspace_members")
     .select("workspaces(*)")
-    .eq("user_id", session.user.id);
+    .eq("user_id", user.id);
 
   return (
     workspaces?.map((wm) => wm.workspaces as unknown as { id: string; name: string; slug: string }) ||

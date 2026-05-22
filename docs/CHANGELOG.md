@@ -98,6 +98,16 @@ Format: Keep a Changelog · Versions: SemVer.
 - Templates create default checklist items, recommended tasks, and content plan items on project creation
 - All template content is operational (prepare launch announcement, set up X profile, set up Telegram, prepare community rules, etc.)
 - No database schema changes required
+- Private Beta Deploy Readiness Sprint
+- Security audit: .gitignore verified for .env.local, supabase/.temp, supabase/.branches
+- Security audit: No hardcoded secrets or service role keys in client code
+- Security audit: createServiceClient only exported, never used in client components
+- .env.example updated with clear comments for optional vars
+- docs/deployment.md expanded with Supabase Cloud setup, Vercel deployment, production checklist
+- Fixed Next.js middleware warning by removing redundant getUser call
+- Replaced unsafe getSession with getUser in lib/actions/workspace.ts, app/app/page.tsx, app/(admin)/layout.tsx
+- README updated with Private Beta quickstart, test flow, deploy flow, known limitations
+- No schema changes required
 
 ### Fixed
 - Route structure: protected app now at /app, workspace dashboard at /app/[slug]

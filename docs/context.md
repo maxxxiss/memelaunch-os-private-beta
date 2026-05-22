@@ -35,6 +35,7 @@ MemeLaunch OS is a legitimate launch operations SaaS for memecoin teams to organ
 - Milestone 4A: Real launch project workspace (project settings, links, weighted readiness, timeline)
 - Milestone 4B: Launch plan export and demo data guidance
 - Milestone 4C: Launch templates (Basic, Solana Meme, Community-First)
+- Private Beta Deploy Readiness Sprint (security audit, deployment docs, auth improvements)
 
 ## Known limitations
 
@@ -44,4 +45,4 @@ MemeLaunch OS is a legitimate launch operations SaaS for memecoin teams to organ
 
 ## Last updated
 
-2026-05-22 — Milestone 4C: Launch Templates
+2026-05-23 — Private Beta Deploy Readiness Sprint
