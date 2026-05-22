@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { TEMPLATES } from "@/lib/templates/launch-templates";
 
 const createLaunchProjectSchema = z.object({
   workspaceId: z.string().uuid(),
@@ -13,6 +14,7 @@ const createLaunchProjectSchema = z.object({
   launchDate: z.string().optional(),
   status: z.enum(["draft", "pre_launch", "launching", "live", "post_launch"]).default("draft"),
   description: z.string().max(500).optional(),
+  template: z.enum(["basic", "solana_meme", "community_first"]).default("basic"),
 });
 
 const updateLaunchProjectSchema = z.object({
@@ -26,18 +28,6 @@ const updateLaunchProjectSchema = z.object({
   workspaceSlug: z.string(),
 });
 
-const DEFAULT_CHECKLIST_ITEMS = [
-  { section: "brand", title: "Define token name and ticker", description: "Finalize your memecoin identity" },
-  { section: "brand", title: "Create logo and branding assets", description: "Design professional visuals" },
-  { section: "community", title: "Set up Telegram group", description: "Create and configure your community channel" },
-  { section: "community", title: "Set up Discord server", description: "Create your Discord community" },
-  { section: "content", title: "Write launch announcement", description: "Prepare your X/Twitter launch thread" },
-  { section: "content", title: "Create content calendar", description: "Plan your first week of posts" },
-  { section: "technical", title: "Configure token metadata", description: "Set up token image and description" },
-  { section: "technical", title: "Review liquidity pool strategy", description: "Plan your DEX launch" },
-  { section: "post_launch", title: "Monitor holder growth", description: "Track early adoption" },
-  { section: "post_launch", title: "Engage with community", description: "Respond to questions and feedback" },
-];
 
 export async function createLaunchProject(formData: FormData) {
   const result = createLaunchProjectSchema.safeParse({
@@ -48,6 +38,7 @@ export async function createLaunchProject(formData: FormData) {
     launchDate: formData.get("launchDate"),
     status: formData.get("status") || "draft",
     description: formData.get("description"),
+    template: formData.get("template") || "basic",
   });
 
   if (!result.success) {
@@ -55,6 +46,7 @@ export async function createLaunchProject(formData: FormData) {
   }
 
   const workspaceSlug = formData.get("workspaceSlug") as string;
+  const template = TEMPLATES[result.data.template];
 
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -81,7 +73,7 @@ export async function createLaunchProject(formData: FormData) {
     return { error: projectError?.message || "Failed to create project" };
   }
 
-  const checklistItems = DEFAULT_CHECKLIST_ITEMS.map((item, index) => ({
+  const checklistItems = template.checklist.map((item, index) => ({
     project_id: project.id,
     section: item.section,
     title: item.title,
@@ -95,6 +87,40 @@ export async function createLaunchProject(formData: FormData) {
 
   if (checklistError) {
     return { error: `Failed to create checklist items: ${checklistError.message}` };
+  }
+
+  const tasks = template.tasks.map((task) => ({
+    workspace_id: result.data.workspaceId,
+    project_id: project.id,
+    title: task.title,
+    status: "todo",
+    priority: task.priority,
+    description: task.description,
+  }));
+
+  const { error: tasksError } = await supabase
+    .from("tasks")
+    .insert(tasks);
+
+  if (tasksError) {
+    return { error: `Failed to create tasks: ${tasksError.message}` };
+  }
+
+  const contentItems = template.content.map((item) => ({
+    workspace_id: result.data.workspaceId,
+    project_id: project.id,
+    title: item.title,
+    platform: item.platform,
+    status: "draft",
+    notes: item.notes,
+  }));
+
+  const { error: contentError } = await supabase
+    .from("content_items")
+    .insert(contentItems);
+
+  if (contentError) {
+    return { error: `Failed to create content items: ${contentError.message}` };
   }
 
   redirect(`/app/${workspaceSlug}/projects/${project.id}`);

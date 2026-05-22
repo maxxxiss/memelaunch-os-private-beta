@@ -1,6 +1,7 @@
 "use client";
 
 import { createLaunchProject } from "@/lib/actions/launch-project";
+import { TEMPLATES } from "@/lib/templates/launch-templates";
 import { useState } from "react";
 
 interface CreateLaunchProjectFormProps {
@@ -11,6 +12,7 @@ interface CreateLaunchProjectFormProps {
 export function CreateLaunchProjectForm({ workspaceId, workspaceSlug }: CreateLaunchProjectFormProps) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState("basic");
 
   async function handleSubmit(formData: FormData) {
     setError(null);
@@ -36,6 +38,23 @@ export function CreateLaunchProjectForm({ workspaceId, workspaceSlug }: CreateLa
         )}
         <input type="hidden" name="workspaceId" value={workspaceId} />
         <input type="hidden" name="workspaceSlug" value={workspaceSlug} />
+        <div>
+          <label htmlFor="template" className="block text-sm font-medium text-slate-300 mb-1">
+            Launch template
+          </label>
+          <select
+            id="template"
+            name="template"
+            value={selectedTemplate}
+            onChange={(e) => setSelectedTemplate(e.target.value)}
+            className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+          >
+            <option value="basic">Basic Launch</option>
+            <option value="solana_meme">Solana Meme Launch</option>
+            <option value="community_first">Community-First Launch</option>
+          </select>
+          <p className="text-xs text-slate-400 mt-1">{TEMPLATES[selectedTemplate].description}</p>
+        </div>
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-1">
             Project name

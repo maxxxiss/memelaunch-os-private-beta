@@ -14,6 +14,7 @@ import { ProjectSettingsForm } from "@/components/launch/ProjectSettingsForm";
 import { ProjectLinks } from "@/components/launch/ProjectLinks";
 import { ReadinessBreakdown } from "@/components/launch/ReadinessBreakdown";
 import { LaunchTimeline } from "@/components/launch/LaunchTimeline";
+import { LaunchPlanSummary } from "@/components/launch/LaunchPlanSummary";
 import Link from "next/link";
 
 export default async function ProjectDetailPage({
@@ -171,6 +172,17 @@ export default async function ProjectDetailPage({
 
         <div className="mb-8">
           <LaunchTimeline tasks={tasks} contentItems={contentItems} />
+        </div>
+
+        <div className="mb-8">
+          <LaunchPlanSummary
+            project={project}
+            links={links}
+            checklist={checklist}
+            tasks={tasks}
+            contentItems={contentItems}
+            readiness={readiness}
+          />
         </div>
 
         <div className="mb-8">

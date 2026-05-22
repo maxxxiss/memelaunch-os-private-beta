@@ -83,6 +83,21 @@ Format: Keep a Changelog · Versions: SemVer.
 - Dashboard readiness score now uses weighted formula
 - Server actions for project links (add, remove, list) with Zod URL validation
 - Server action to update launch project with revalidatePath
+- Milestone 4B: Launch Plan Export + Demo Data Guidance
+- LaunchPlanSummary component with project overview, links, and progress display
+- Copy to clipboard functionality for launch plan export
+- Markdown generation includes project overview, links, readiness breakdown, checklist, tasks, and content plan
+- Helpful empty states for missing links with guidance to add X and Telegram
+- Client-side clipboard API with success state feedback
+- No database schema changes required
+- Milestone 4C: Launch Templates
+- Three launch templates: Basic Launch, Solana Meme Launch, Community-First Launch
+- Template data structures with checklist items, tasks, and content plan items
+- Template selector in CreateLaunchProjectForm with descriptions
+- createLaunchProject server action now accepts template parameter
+- Templates create default checklist items, recommended tasks, and content plan items on project creation
+- All template content is operational (prepare launch announcement, set up X profile, set up Telegram, prepare community rules, etc.)
+- No database schema changes required
 
 ### Fixed
 - Route structure: protected app now at /app, workspace dashboard at /app/[slug]
