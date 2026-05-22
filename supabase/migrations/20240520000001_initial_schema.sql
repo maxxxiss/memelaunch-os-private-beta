@@ -1,5 +1,5 @@
--- Enable UUID extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- Enable pgcrypto for gen_random_uuid()
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- Profiles table
 CREATE TABLE profiles (
@@ -12,7 +12,7 @@ CREATE TABLE profiles (
 
 -- Workspaces table
 CREATE TABLE workspaces (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
   status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'suspended')),
@@ -23,7 +23,7 @@ CREATE TABLE workspaces (
 
 -- Workspace members table
 CREATE TABLE workspace_members (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   role TEXT NOT NULL DEFAULT 'member' CHECK (role IN ('owner', 'member', 'viewer')),
@@ -34,7 +34,7 @@ CREATE TABLE workspace_members (
 
 -- Launch projects table
 CREATE TABLE launch_projects (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
   name TEXT NOT NULL,
   ticker TEXT NOT NULL,

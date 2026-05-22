@@ -5,7 +5,7 @@ ALTER TABLE launch_projects ADD CONSTRAINT launch_projects_status_check
 
 -- Launch checklist items table
 CREATE TABLE launch_checklist_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   project_id UUID NOT NULL REFERENCES launch_projects(id) ON DELETE CASCADE,
   section TEXT NOT NULL CHECK (section IN ('brand', 'community', 'content', 'technical', 'post_launch')),
   title TEXT NOT NULL,

@@ -1,6 +1,6 @@
 -- Tasks table
 CREATE TABLE tasks (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
   project_id UUID REFERENCES launch_projects(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE tasks (
 
 -- Content items table
 CREATE TABLE content_items (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
   project_id UUID REFERENCES launch_projects(id) ON DELETE CASCADE,
   title TEXT NOT NULL,
