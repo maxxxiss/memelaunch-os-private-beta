@@ -108,6 +108,14 @@ Format: Keep a Changelog · Versions: SemVer.
 - Replaced unsafe getSession with getUser in lib/actions/workspace.ts, app/app/page.tsx, app/(admin)/layout.tsx
 - README updated with Private Beta quickstart, test flow, deploy flow, known limitations
 - No schema changes required
+- Readiness scoring fix
+- Tasks now score based on completed tasks (status = "done") / total tasks
+- Content now scores based on scheduled/published content / total content
+- Draft content gives 0 readiness points
+- Required links now score 7.5 points each (X and Telegram) instead of all-or-nothing 15
+- Updated labels: "Tasks created" -> "Tasks completed", "Content planned" -> "Content scheduled/published"
+- New project from template now shows 0% readiness until actual work is completed
+- No schema changes required
 
 ### Fixed
 - Route structure: protected app now at /app, workspace dashboard at /app/[slug]

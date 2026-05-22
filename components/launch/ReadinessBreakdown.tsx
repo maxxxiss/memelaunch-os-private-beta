@@ -9,8 +9,8 @@ export function ReadinessBreakdown({ breakdown }: ReadinessBreakdownProps) {
     { label: "Checklist completion", score: breakdown.checklistScore, max: 50 },
     { label: "Launch date set", score: breakdown.launchDateScore, max: 15 },
     { label: "Required links (X + Telegram)", score: breakdown.requiredLinksScore, max: 15 },
-    { label: "Tasks created", score: breakdown.tasksScore, max: 10 },
-    { label: "Content planned", score: breakdown.contentScore, max: 10 },
+    { label: "Tasks completed", score: breakdown.tasksScore, max: 10 },
+    { label: "Content scheduled/published", score: breakdown.contentScore, max: 10 },
   ];
 
   return (

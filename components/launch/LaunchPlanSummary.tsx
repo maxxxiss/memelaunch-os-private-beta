@@ -107,8 +107,8 @@ export function LaunchPlanSummary({
     md += `- Checklist completion: ${readiness.checklistScore}/50\n`;
     md += `- Launch date set: ${readiness.launchDateScore}/15\n`;
     md += `- Required links (X + Telegram): ${readiness.requiredLinksScore}/15\n`;
-    md += `- Tasks created: ${readiness.tasksScore}/10\n`;
-    md += `- Content planned: ${readiness.contentScore}/10\n\n`;
+    md += `- Tasks completed: ${readiness.tasksScore}/10\n`;
+    md += `- Content scheduled/published: ${readiness.contentScore}/10\n\n`;
 
     md += `## Checklist Progress\n\n`;
     md += `${completedChecklist}/${checklist.length} items completed\n\n`;

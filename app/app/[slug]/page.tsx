@@ -73,8 +73,10 @@ export default async function WorkspacePage({
     const hasLaunchDate = !!activeProject.launch_date;
     const hasXLink = links.some((l) => l.type === "x");
     const hasTelegramLink = links.some((l) => l.type === "telegram");
-    const hasTasks = projectTasks.length > 0;
-    const hasContent = projectContent.length > 0;
+    const tasksCompleted = projectTasks.filter((t) => t.status === "done").length;
+    const tasksTotal = projectTasks.length;
+    const contentScheduledPublished = projectContent.filter((c) => c.status === "scheduled" || c.status === "published").length;
+    const contentTotal = projectContent.length;
 
     const readiness = calculateReadinessScore(
       completed,
@@ -82,8 +84,10 @@ export default async function WorkspacePage({
       hasLaunchDate,
       hasXLink,
       hasTelegramLink,
-      hasTasks,
-      hasContent
+      tasksCompleted,
+      tasksTotal,
+      contentScheduledPublished,
+      contentTotal
     );
     launchReadiness = readiness.totalScore;
   }

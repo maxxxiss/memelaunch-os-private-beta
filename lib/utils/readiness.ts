@@ -13,14 +13,16 @@ export function calculateReadinessScore(
   hasLaunchDate: boolean,
   hasXLink: boolean,
   hasTelegramLink: boolean,
-  hasTasks: boolean,
-  hasContent: boolean
+  tasksCompleted: number,
+  tasksTotal: number,
+  contentScheduledPublished: number,
+  contentTotal: number
 ): ReadinessBreakdown {
   const checklistScore = checklistTotal > 0 ? (checklistCompleted / checklistTotal) * 50 : 0;
   const launchDateScore = hasLaunchDate ? 15 : 0;
-  const requiredLinksScore = (hasXLink && hasTelegramLink) ? 15 : 0;
-  const tasksScore = hasTasks ? 10 : 0;
-  const contentScore = hasContent ? 10 : 0;
+  const requiredLinksScore = (hasXLink ? 7.5 : 0) + (hasTelegramLink ? 7.5 : 0);
+  const tasksScore = tasksTotal > 0 ? (tasksCompleted / tasksTotal) * 10 : 0;
+  const contentScore = contentTotal > 0 ? (contentScheduledPublished / contentTotal) * 10 : 0;
 
   const totalScore = Math.round(
     checklistScore + launchDateScore + requiredLinksScore + tasksScore + contentScore
@@ -29,9 +31,9 @@ export function calculateReadinessScore(
   return {
     checklistScore: Math.round(checklistScore),
     launchDateScore,
-    requiredLinksScore,
-    tasksScore,
-    contentScore,
+    requiredLinksScore: Math.round(requiredLinksScore),
+    tasksScore: Math.round(tasksScore),
+    contentScore: Math.round(contentScore),
     totalScore,
   };
 }

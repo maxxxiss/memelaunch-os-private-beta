@@ -73,8 +73,10 @@ export default async function ProjectDetailPage({
   const hasLaunchDate = !!project.launch_date;
   const hasXLink = links.some((l) => l.type === "x");
   const hasTelegramLink = links.some((l) => l.type === "telegram");
-  const hasTasks = tasks.length > 0;
-  const hasContent = contentItems.length > 0;
+  const tasksCompleted = tasks.filter((t) => t.status === "done").length;
+  const tasksTotal = tasks.length;
+  const contentScheduledPublished = contentItems.filter((c) => c.status === "scheduled" || c.status === "published").length;
+  const contentTotal = contentItems.length;
 
   const readiness = calculateReadinessScore(
     completed,
@@ -82,8 +84,10 @@ export default async function ProjectDetailPage({
     hasLaunchDate,
     hasXLink,
     hasTelegramLink,
-    hasTasks,
-    hasContent
+    tasksCompleted,
+    tasksTotal,
+    contentScheduledPublished,
+    contentTotal
   );
 
   return (
