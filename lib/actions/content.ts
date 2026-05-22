@@ -80,6 +80,16 @@ export async function updateContentStatus(itemId: string, status: string) {
     return { error: "Content item not found" };
   }
 
+  const { data: workspace } = await supabase
+    .from("workspaces")
+    .select("slug")
+    .eq("id", item.workspace_id)
+    .maybeSingle();
+
+  if (!workspace) {
+    return { error: "Workspace not found" };
+  }
+
   const { error } = await supabase
     .from("content_items")
     .update({ status, updated_at: new Date().toISOString() })
@@ -89,9 +99,9 @@ export async function updateContentStatus(itemId: string, status: string) {
     return { error: error.message };
   }
 
-  revalidatePath(`/app/${item.workspace_id}`);
+  revalidatePath(`/app/${workspace.slug}`);
   if (item.project_id) {
-    revalidatePath(`/app/${item.workspace_id}/projects/${item.project_id}`);
+    revalidatePath(`/app/${workspace.slug}/projects/${item.project_id}`);
   }
 
   return { success: true };

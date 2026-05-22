@@ -4,6 +4,8 @@ import { SignOutButton } from "@/components/auth/SignOutButton";
 import { getWorkspaceLaunchProjects } from "@/lib/actions/launch-project";
 import { getWorkspaceTasks } from "@/lib/actions/task";
 import { getWorkspaceContentItems } from "@/lib/actions/content";
+import { getProjectLinks } from "@/lib/actions/project-link";
+import { calculateReadinessScore } from "@/lib/utils/readiness";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardMetrics } from "@/components/dashboard/DashboardMetrics";
 import Link from "next/link";
@@ -60,11 +62,30 @@ export default async function WorkspacePage({
       .select("*")
       .eq("project_id", activeProject.id);
 
-    if (checklist && checklist.length > 0) {
-      const completed = checklist.filter((item) => item.completed).length;
-      checklistProgress = { completed, total: checklist.length };
-      launchReadiness = Math.round((completed / checklist.length) * 100);
-    }
+    const links = await getProjectLinks(activeProject.id);
+    const projectTasks = await getWorkspaceTasks(workspace.id);
+    const projectContent = await getWorkspaceContentItems(workspace.id);
+
+    const completed = checklist?.filter((item) => item.completed).length || 0;
+    const total = checklist?.length || 0;
+    checklistProgress = { completed, total };
+
+    const hasLaunchDate = !!activeProject.launch_date;
+    const hasXLink = links.some((l) => l.type === "x");
+    const hasTelegramLink = links.some((l) => l.type === "telegram");
+    const hasTasks = projectTasks.length > 0;
+    const hasContent = projectContent.length > 0;
+
+    const readiness = calculateReadinessScore(
+      completed,
+      total,
+      hasLaunchDate,
+      hasXLink,
+      hasTelegramLink,
+      hasTasks,
+      hasContent
+    );
+    launchReadiness = readiness.totalScore;
   }
 
   return (

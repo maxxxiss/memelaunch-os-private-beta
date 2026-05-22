@@ -83,6 +83,16 @@ export async function updateTaskStatus(taskId: string, status: string) {
     return { error: "Task not found" };
   }
 
+  const { data: workspace } = await supabase
+    .from("workspaces")
+    .select("slug")
+    .eq("id", task.workspace_id)
+    .maybeSingle();
+
+  if (!workspace) {
+    return { error: "Workspace not found" };
+  }
+
   const { error } = await supabase
     .from("tasks")
     .update({ status, updated_at: new Date().toISOString() })
@@ -92,9 +102,9 @@ export async function updateTaskStatus(taskId: string, status: string) {
     return { error: error.message };
   }
 
-  revalidatePath(`/app/${task.workspace_id}`);
+  revalidatePath(`/app/${workspace.slug}`);
   if (task.project_id) {
-    revalidatePath(`/app/${task.workspace_id}/projects/${task.project_id}`);
+    revalidatePath(`/app/${workspace.slug}/projects/${task.project_id}`);
   }
 
   return { success: true };

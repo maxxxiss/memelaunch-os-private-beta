@@ -15,6 +15,17 @@ const createLaunchProjectSchema = z.object({
   description: z.string().max(500).optional(),
 });
 
+const updateLaunchProjectSchema = z.object({
+  projectId: z.string().uuid(),
+  name: z.string().min(1).max(100),
+  ticker: z.string().min(1).max(20),
+  chain: z.string().default("solana"),
+  launchDate: z.string().optional(),
+  status: z.enum(["draft", "pre_launch", "launching", "live", "post_launch"]),
+  description: z.string().max(500).optional(),
+  workspaceSlug: z.string(),
+});
+
 const DEFAULT_CHECKLIST_ITEMS = [
   { section: "brand", title: "Define token name and ticker", description: "Finalize your memecoin identity" },
   { section: "brand", title: "Create logo and branding assets", description: "Design professional visuals" },
@@ -160,4 +171,60 @@ export async function getProjectChecklist(projectId: string) {
   }
 
   return data;
+}
+
+export async function updateLaunchProject(formData: FormData) {
+  const result = updateLaunchProjectSchema.safeParse({
+    projectId: formData.get("projectId"),
+    name: formData.get("name"),
+    ticker: formData.get("ticker"),
+    chain: formData.get("chain") || "solana",
+    launchDate: formData.get("launchDate"),
+    status: formData.get("status"),
+    description: formData.get("description"),
+    workspaceSlug: formData.get("workspaceSlug"),
+  });
+
+  if (!result.success) {
+    return { error: "Invalid input" };
+  }
+
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Not authenticated" };
+  }
+
+  const { data: project } = await supabase
+    .from("launch_projects")
+    .select("workspace_id")
+    .eq("id", result.data.projectId)
+    .maybeSingle();
+
+  if (!project) {
+    return { error: "Project not found" };
+  }
+
+  const { error } = await supabase
+    .from("launch_projects")
+    .update({
+      name: result.data.name,
+      ticker: result.data.ticker,
+      chain: result.data.chain,
+      launch_date: result.data.launchDate ? new Date(result.data.launchDate).toISOString() : null,
+      status: result.data.status,
+      description: result.data.description,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", result.data.projectId);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath(`/app/${result.data.workspaceSlug}`);
+  revalidatePath(`/app/${result.data.workspaceSlug}/projects/${result.data.projectId}`);
+
+  return { success: true };
 }

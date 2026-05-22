@@ -72,6 +72,17 @@ Format: Keep a Changelog · Versions: SemVer.
 - Buttons now have disabled:cursor-not-allowed and transition-colors
 - Textareas now have resize-none to prevent layout shifts
 - All interactive elements have transition-colors for smooth hover states
+- Milestone 4A: Real Launch Project Workspace
+- project_links table with RLS policies (type, url, label)
+- Project settings form to edit name, ticker, chain, launch date, status, description
+- Project links section to add/remove project links (Website, X, Telegram, Discord, Chart, Docs)
+- Weighted launch readiness score calculation (50% checklist, 15% launch date, 15% required links, 10% tasks, 10% content)
+- Readiness breakdown component showing score components with progress bars
+- Launch timeline component showing tasks and content chronologically
+- Project detail page now shows readiness score instead of simple checklist progress
+- Dashboard readiness score now uses weighted formula
+- Server actions for project links (add, remove, list) with Zod URL validation
+- Server action to update launch project with revalidatePath
 
 ### Fixed
 - Route structure: protected app now at /app, workspace dashboard at /app/[slug]

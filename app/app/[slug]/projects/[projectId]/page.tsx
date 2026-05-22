@@ -3,11 +3,17 @@ import { redirect } from "next/navigation";
 import { getProjectChecklist } from "@/lib/actions/launch-project";
 import { getProjectTasks } from "@/lib/actions/task";
 import { getProjectContentItems } from "@/lib/actions/content";
+import { getProjectLinks } from "@/lib/actions/project-link";
+import { calculateReadinessScore } from "@/lib/utils/readiness";
 import { ProjectChecklist } from "@/components/launch/ProjectChecklist";
 import { TaskList } from "@/components/tasks/TaskList";
 import { ContentList } from "@/components/content/ContentList";
 import { CreateTaskForm } from "@/components/tasks/CreateTaskForm";
 import { CreateContentForm } from "@/components/content/CreateContentForm";
+import { ProjectSettingsForm } from "@/components/launch/ProjectSettingsForm";
+import { ProjectLinks } from "@/components/launch/ProjectLinks";
+import { ReadinessBreakdown } from "@/components/launch/ReadinessBreakdown";
+import { LaunchTimeline } from "@/components/launch/LaunchTimeline";
 import Link from "next/link";
 
 export default async function ProjectDetailPage({
@@ -59,10 +65,25 @@ export default async function ProjectDetailPage({
   const checklist = await getProjectChecklist(projectId);
   const tasks = await getProjectTasks(projectId);
   const contentItems = await getProjectContentItems(projectId);
+  const links = await getProjectLinks(projectId);
 
   const completed = checklist.filter((item) => item.completed).length;
   const total = checklist.length;
-  const progress = total > 0 ? Math.round((completed / total) * 100) : 0;
+  const hasLaunchDate = !!project.launch_date;
+  const hasXLink = links.some((l) => l.type === "x");
+  const hasTelegramLink = links.some((l) => l.type === "telegram");
+  const hasTasks = tasks.length > 0;
+  const hasContent = contentItems.length > 0;
+
+  const readiness = calculateReadinessScore(
+    completed,
+    total,
+    hasLaunchDate,
+    hasXLink,
+    hasTelegramLink,
+    hasTasks,
+    hasContent
+  );
 
   return (
     <div className="min-h-screen bg-[#05070d] p-6">
@@ -86,9 +107,9 @@ export default async function ProjectDetailPage({
             </div>
           </div>
           <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
-            <h3 className="font-semibold text-white mb-2">Progress</h3>
-            <div className="text-3xl font-bold text-blue-500 mb-1">{progress}%</div>
-            <p className="text-sm text-slate-300">{completed}/{total} tasks</p>
+            <h3 className="font-semibold text-white mb-2">Readiness</h3>
+            <div className="text-3xl font-bold text-blue-500 mb-1">{readiness.totalScore}%</div>
+            <p className="text-sm text-slate-300">Launch readiness score</p>
           </div>
           <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
             <h3 className="font-semibold text-white mb-2">Launch Date</h3>
@@ -115,7 +136,7 @@ export default async function ProjectDetailPage({
           <div className="w-full bg-[#0b1020] rounded-full h-2 mb-6">
             <div
               className="bg-blue-500 h-2 rounded-full transition-all"
-              style={{ width: `${progress}%` }}
+              style={{ width: `${total > 0 ? (completed / total) * 100 : 0}%` }}
             />
           </div>
           <ProjectChecklist projectId={projectId} items={checklist} />
@@ -136,6 +157,36 @@ export default async function ProjectDetailPage({
               <CreateContentForm workspaceId={workspace.id} workspaceSlug={workspace.slug} projectId={projectId} />
             </div>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <ReadinessBreakdown breakdown={readiness} />
+          <ProjectLinks
+            projectId={projectId}
+            workspaceId={workspace.id}
+            workspaceSlug={workspace.slug}
+            links={links}
+          />
+        </div>
+
+        <div className="mb-8">
+          <LaunchTimeline tasks={tasks} contentItems={contentItems} />
+        </div>
+
+        <div className="mb-8">
+          <ProjectSettingsForm
+            projectId={projectId}
+            workspaceId={workspace.id}
+            workspaceSlug={workspace.slug}
+            initialData={{
+              name: project.name,
+              ticker: project.ticker,
+              chain: project.chain,
+              launch_date: project.launch_date,
+              status: project.status,
+              description: project.description,
+            }}
+          />
         </div>
       </div>
     </div>
