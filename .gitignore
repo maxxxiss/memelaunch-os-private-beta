@@ -1,0 +1,39 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Next.js
+.next
+out
+.vercel
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Supabase
+.supabase
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Build
+dist
+build
+
+# Supabase local state
+supabase/.temp/
+supabase/.branches/

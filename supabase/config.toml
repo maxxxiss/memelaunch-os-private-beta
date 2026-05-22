@@ -1,0 +1,32 @@
+[api]
+enabled = true
+port = 65431
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+
+[db]
+port = 65432
+shadow_port = 65433
+major_version = 15
+
+[studio]
+enabled = true
+port = 65434
+api_url = "http://127.0.0.1:65431"
+
+[inbucket]
+enabled = false
+port = 65435
+
+[storage]
+enabled = true
+file_size_limit = "50MiB"
+
+[auth]
+enabled = true
+site_url = "http://localhost:3000"
+additional_redirect_urls = ["http://localhost:3000", "https://localhost:3000"]
+jwt_expiry = 3600
+
+[analytics]
+enabled = false
