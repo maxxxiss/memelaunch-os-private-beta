@@ -18,6 +18,12 @@ export async function syncUserSubscriptionToWorkspace(
     .limit(1)
     .single();
 
+  console.log("syncUserSubscriptionToWorkspace", {
+    userId,
+    workspaceId,
+    foundUserLevelSubscription: !!subscription,
+  });
+
   if (!subscription) {
     const { data: workspace } = await supabase
       .from("workspaces")
@@ -62,19 +68,50 @@ export async function getEffectiveWorkspacePlan(
     .eq("id", workspaceId)
     .single();
 
-  if (workspace?.plan && workspace.plan !== "free") {
-    return workspace.plan;
-  }
+  let foundWorkspaceSubscription = false;
+  let foundUserLevelSubscription = false;
+  let effectivePlan = workspace?.plan || "free";
 
-  const { data: subscription } = await supabase
+  const { data: workspaceSubscription } = await supabase
     .from("subscriptions")
     .select("plan_type")
-    .or(`workspace_id.eq.${workspaceId},and(user_id.eq.${userId},workspace_id.is.null)`)
+    .eq("workspace_id", workspaceId)
     .in("status", ["active", "trialing"])
     .order("created_at", { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
-  return subscription?.plan_type || workspace?.plan || "free";
+  if (workspaceSubscription) {
+    foundWorkspaceSubscription = true;
+    effectivePlan = workspaceSubscription.plan_type;
+  }
+
+  if (!workspaceSubscription) {
+    const { data: userSubscription } = await supabase
+      .from("subscriptions")
+      .select("plan_type")
+      .eq("user_id", userId)
+      .is("workspace_id", null)
+      .in("status", ["active", "trialing"])
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (userSubscription) {
+      foundUserLevelSubscription = true;
+      effectivePlan = userSubscription.plan_type;
+    }
+  }
+
+  console.log("getEffectiveWorkspacePlan", {
+    userId,
+    workspaceId,
+    foundWorkspaceSubscription,
+    foundUserLevelSubscription,
+    effectivePlan,
+    workspacePlan: workspace?.plan,
+  });
+
+  return effectivePlan;
 }
 
