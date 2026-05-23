@@ -3,8 +3,14 @@ import { getUserWorkspaces } from "@/lib/actions/workspace";
 import { redirect } from "next/navigation";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { WorkspaceOnboarding } from "@/components/workspace/WorkspaceOnboarding";
+import { CheckoutSuccessMessage } from "./CheckoutSuccessMessage";
 
-export default async function AppPage() {
+export default async function AppPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ checkout?: string }>;
+}) {
+  const { checkout } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -24,6 +30,7 @@ export default async function AppPage() {
           <SignOutButton />
         </header>
         <main className="max-w-2xl mx-auto p-6">
+          {checkout === "success" && <CheckoutSuccessMessage />}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">Create your workspace</h1>
             <p className="text-slate-300">

@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { createCheckoutSession } from "@/lib/actions/stripe";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 interface PricingCardsProps {
   proPriceId: string;
@@ -11,8 +12,17 @@ interface PricingCardsProps {
 }
 
 export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: PricingCardsProps) {
+  const searchParams = useSearchParams();
+  const checkoutStatus = searchParams.get("checkout");
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (checkoutStatus === "cancelled") {
+      setLoading(null);
+      setError(null);
+    }
+  }, [checkoutStatus]);
 
   const handleCheckout = async (priceId: string, planName: string) => {
     setLoading(planName);
@@ -31,6 +41,12 @@ export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: Pric
 
   return (
     <>
+      {checkoutStatus === "cancelled" && (
+        <div className="mb-6 p-4 bg-slate-500/10 border border-slate-500/50 rounded-lg">
+          <p className="text-slate-300 text-sm">Checkout cancelled. You can try again anytime.</p>
+        </div>
+      )}
+
       {error && (
         <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
           <p className="text-red-400 text-sm">{error}</p>

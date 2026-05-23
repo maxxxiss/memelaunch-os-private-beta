@@ -9,13 +9,17 @@ import { calculateReadinessScore } from "@/lib/utils/readiness";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardMetrics } from "@/components/dashboard/DashboardMetrics";
 import Link from "next/link";
+import { CheckoutSuccessMessage } from "../CheckoutSuccessMessage";
 
 export default async function WorkspacePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ checkout?: string }>;
 }) {
   const { slug } = await params;
+  const { checkout } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -109,6 +113,8 @@ export default async function WorkspacePage({
             <SignOutButton />
           </div>
         </header>
+
+        {checkout === "success" && <CheckoutSuccessMessage />}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           <DashboardMetrics

@@ -4,16 +4,39 @@ import { createClient } from "@/lib/supabase/server";
 import { env } from "@/lib/env";
 import Stripe from "stripe";
 
-if (!env.STRIPE_SECRET_KEY) {
-  console.warn("STRIPE_SECRET_KEY not set. Stripe features disabled.");
-}
-
-const stripe = env.STRIPE_SECRET_KEY ? new Stripe(env.STRIPE_SECRET_KEY) : null;
-
 export async function createCheckoutSession(priceId: string) {
-  if (!stripe) {
-    throw new Error("Stripe is not configured");
+  if (!env.STRIPE_SECRET_KEY) {
+    throw new Error("Missing STRIPE_SECRET_KEY");
   }
+
+  if (!env.NEXT_PUBLIC_APP_URL) {
+    throw new Error("Missing NEXT_PUBLIC_APP_URL");
+  }
+
+  if (!priceId) {
+    throw new Error("Missing price ID");
+  }
+
+  const isProPrice = priceId === env.STRIPE_PRICE_ID_PRO;
+  const isTeamPrice = priceId === env.STRIPE_PRICE_ID_TEAM;
+
+  if (isProPrice && !env.STRIPE_PRICE_ID_PRO) {
+    throw new Error("Missing STRIPE_PRICE_ID_PRO");
+  }
+
+  if (isTeamPrice && !env.STRIPE_PRICE_ID_TEAM) {
+    throw new Error("Missing STRIPE_PRICE_ID_TEAM");
+  }
+
+  if (isProPrice && !env.STRIPE_PRICE_ID_PRO?.startsWith("price_")) {
+    throw new Error("Invalid STRIPE_PRICE_ID_PRO, expected price_...");
+  }
+
+  if (isTeamPrice && !env.STRIPE_PRICE_ID_TEAM?.startsWith("price_")) {
+    throw new Error("Invalid STRIPE_PRICE_ID_TEAM, expected price_...");
+  }
+
+  const stripe = new Stripe(env.STRIPE_SECRET_KEY);
 
   const supabase = await createClient();
   const {
