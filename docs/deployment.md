@@ -74,6 +74,11 @@ Set these in Render dashboard:
 - `ADMIN_EMAIL` - Admin email for bootstrap
 - `ADMIN_PASSWORD_HASH` - Pre-hashed admin password
 - `ADMIN_BOOTSTRAP_DISPLAY_NAME` - Admin display name
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe publishable key for payments
+- `STRIPE_SECRET_KEY` - Stripe secret key for server-side operations
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret for verifying webhooks
+- `STRIPE_PRICE_ID_PRO` - Stripe Pro plan price ID
+- `STRIPE_PRICE_ID_TEAM` - Stripe Team plan price ID
 - `DEXSCREENER_API_KEY` - For token metrics (future)
 - `HELIUS_API_KEY` - For token metrics (future)
 - `BIRDEYE_API_KEY` - For token metrics (future)
@@ -126,7 +131,17 @@ Set these in Vercel dashboard:
 - `NEXT_PUBLIC_APP_URL` - Your Vercel app URL (e.g., https://memelaunch-os.vercel.app)
 
 **Optional:**
-- Same as Render above
+- `ADMIN_EMAIL` - Admin email for bootstrap
+- `ADMIN_PASSWORD_HASH` - Pre-hashed admin password
+- `ADMIN_BOOTSTRAP_DISPLAY_NAME` - Admin display name
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` - Stripe publishable key for payments
+- `STRIPE_SECRET_KEY` - Stripe secret key for server-side operations
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook secret for verifying webhooks
+- `STRIPE_PRICE_ID_PRO` - Stripe Pro plan price ID
+- `STRIPE_PRICE_ID_TEAM` - Stripe Team plan price ID
+- `DEXSCREENER_API_KEY` - For token metrics (future)
+- `HELIUS_API_KEY` - For token metrics (future)
+- `BIRDEYE_API_KEY` - For token metrics (future)
 
 ### Production Checklist
 

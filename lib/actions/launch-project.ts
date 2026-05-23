@@ -55,6 +55,23 @@ export async function createLaunchProject(formData: FormData) {
     return { error: "Not authenticated" };
   }
 
+  const { data: workspace } = await supabase
+    .from("workspaces")
+    .select("plan")
+    .eq("id", result.data.workspaceId)
+    .single();
+
+  if (workspace?.plan === "free") {
+    const { count: projectCount } = await supabase
+      .from("launch_projects")
+      .select("*", { count: "exact", head: true })
+      .eq("workspace_id", result.data.workspaceId);
+
+    if (projectCount && projectCount >= 1) {
+      return { error: "Free plan limited to 1 project per workspace. Upgrade to Pro for unlimited projects." };
+    }
+  }
+
   const { data: project, error: projectError } = await supabase
     .from("launch_projects")
     .insert({

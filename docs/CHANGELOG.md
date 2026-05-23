@@ -116,6 +116,22 @@ Format: Keep a Changelog · Versions: SemVer.
 - Updated labels: "Tasks created" -> "Tasks completed", "Content planned" -> "Content scheduled/published"
 - New project from template now shows 0% readiness until actual work is completed
 - No schema changes required
+- Milestone 5A: Admin Panel + Stripe Payment Foundation
+- Admin roles table with RLS policies for proper admin management
+- Subscriptions table for Stripe payment tracking
+- Workspace plan column (free, pro, team)
+- Admin dashboard with metrics (users, workspaces, projects, subscriptions)
+- Admin users list page
+- Admin workspaces list page with suspend/unsuspend action
+- Admin projects list page
+- Pricing page with Free, Pro, Team plans
+- Stripe checkout session server action
+- Stripe webhook API route (checkout.session.completed, customer.subscription events)
+- Workspace dashboard shows current plan badge
+- Free plan limits enforced: 1 workspace, 1 project per workspace
+- Stripe env vars added to .env.example and lib/env.ts
+- Stripe package added to dependencies
+- No fake paid status - all Stripe integration is real
 
 ### Fixed
 - Route structure: protected app now at /app, workspace dashboard at /app/[slug]

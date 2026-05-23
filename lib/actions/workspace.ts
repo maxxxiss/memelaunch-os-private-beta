@@ -17,6 +17,26 @@ export async function createWorkspace(formData: FormData) {
   }
 
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "Not authenticated" };
+  }
+
+  const { data: existingWorkspaces } = await supabase
+    .from("workspace_members")
+    .select("workspaces(plan)")
+    .eq("user_id", user.id);
+
+  const workspaceCount = existingWorkspaces?.length || 0;
+  const hasFreePlanOnly = existingWorkspaces?.every((wm: any) => wm.workspaces?.plan === "free");
+
+  if (hasFreePlanOnly && workspaceCount >= 1) {
+    return { error: "Free plan limited to 1 workspace. Upgrade to Pro for unlimited workspaces." };
+  }
+
   const { data, error } = await supabase.rpc("create_workspace_with_owner", {
     workspace_name: result.data.name,
     workspace_slug: result.data.slug,

@@ -37,13 +37,14 @@ MemeLaunch OS is a legitimate launch operations SaaS for memecoin teams to organ
 - Milestone 4C: Launch templates (Basic, Solana Meme, Community-First)
 - Private Beta Deploy Readiness Sprint (security audit, deployment docs, auth improvements)
 - Readiness scoring fix (tasks/content now measure actual completion, not existence)
+- Milestone 5A: Admin Panel + Stripe Payment Foundation
 
 ## Known limitations
 
-- No Stripe yet
+- Stripe checkout not yet connected to pricing page
 - No Telegram/Discord integrations yet
 - No token metrics yet
 
 ## Last updated
 
-2026-05-23 — Readiness scoring fix
+2026-05-23 — Milestone 5A: Admin Panel + Stripe Payment Foundation

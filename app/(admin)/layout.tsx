@@ -12,16 +12,13 @@ export default async function AdminLayout({
   } = await supabase.auth.getUser();
 
   if (!user) {
-    redirect("/auth/signin");
+    redirect("/login");
   }
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("display_name")
-    .eq("id", user.id)
-    .single();
+  const { data: isAdmin } = await supabase
+    .rpc("is_admin");
 
-  if (profile?.display_name !== "ADMIN_BOOTSTRAP") {
+  if (!isAdmin) {
     redirect("/app");
   }
 

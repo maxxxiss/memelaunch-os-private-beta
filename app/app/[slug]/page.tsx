@@ -102,7 +102,12 @@ export default async function WorkspacePage({
             <h1 className="text-2xl font-bold text-white tracking-tight">Dashboard</h1>
             <p className="text-slate-300 text-sm">Launch command center</p>
           </div>
-          <SignOutButton />
+          <div className="flex items-center gap-4">
+            <span className="px-3 py-1 bg-[#111827] border border-white/10 rounded-full text-sm text-slate-300 capitalize">
+              {workspace.plan} plan
+            </span>
+            <SignOutButton />
+          </div>
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

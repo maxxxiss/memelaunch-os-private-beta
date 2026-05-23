@@ -21,10 +21,12 @@ const envSchema = z.object({
   HELIUS_API_KEY: z.string().optional(),
   BIRDEYE_API_KEY: z.string().optional(),
 
-  // Stripe (later)
+  // Stripe
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().optional(),
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
   STRIPE_PRICE_ID_PRO: z.string().optional(),
+  STRIPE_PRICE_ID_TEAM: z.string().optional(),
 
   // Telegram/Discord (later)
   TELEGRAM_BOT_TOKEN: z.string().optional(),
