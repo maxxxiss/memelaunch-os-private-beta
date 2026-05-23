@@ -210,8 +210,7 @@ export async function POST(req: Request) {
       }
 
       case "invoice.payment_succeeded":
-      case "invoice.payment_failed":
-      case "invoice_payment.paid": {
+      case "invoice.payment_failed": {
         console.log(`Invoice event: ${event.type}`);
         break;
       }
