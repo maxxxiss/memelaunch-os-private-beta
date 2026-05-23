@@ -1,26 +1,24 @@
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
-import { env } from "@/lib/env";
 import Stripe from "stripe";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const stripe = env.STRIPE_SECRET_KEY ? new Stripe(env.STRIPE_SECRET_KEY) : null;
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
+
+if (!stripeSecretKey) {
+  throw new Error("Missing STRIPE_SECRET_KEY");
+}
+
+const stripe = new Stripe(stripeSecretKey);
 
 export async function POST(req: Request) {
-  if (!env.STRIPE_WEBHOOK_SECRET) {
+  if (!webhookSecret) {
     console.error("Missing STRIPE_WEBHOOK_SECRET");
     return NextResponse.json(
       { error: "Missing STRIPE_WEBHOOK_SECRET" },
-      { status: 400 }
-    );
-  }
-
-  if (!stripe) {
-    console.error("Missing STRIPE_SECRET_KEY");
-    return NextResponse.json(
-      { error: "Missing STRIPE_SECRET_KEY" },
       { status: 400 }
     );
   }
@@ -29,8 +27,9 @@ export async function POST(req: Request) {
   const signature = req.headers.get("stripe-signature");
 
   console.log("stripe webhook received", {
+    eventType: "unknown",
     hasSignature: Boolean(signature),
-    hasWebhookSecret: Boolean(process.env.STRIPE_WEBHOOK_SECRET),
+    hasWebhookSecret: Boolean(webhookSecret),
     bodyLength: body.length,
   });
 
@@ -45,11 +44,7 @@ export async function POST(req: Request) {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(
-      body,
-      signature,
-      env.STRIPE_WEBHOOK_SECRET
-    );
+    event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : "Unknown error";
     console.error("stripe signature verification failed", errorMessage);
@@ -58,6 +53,13 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
+
+  console.log("stripe webhook received", {
+    eventType: event.type,
+    hasSignature: Boolean(signature),
+    hasWebhookSecret: Boolean(webhookSecret),
+    bodyLength: body.length,
+  });
 
   const supabase = createServiceClient();
 
@@ -70,24 +72,25 @@ export async function POST(req: Request) {
         const userId = session.metadata?.userId;
         const workspaceId = session.metadata?.workspaceId;
         const plan = session.metadata?.plan;
+        const priceId = session.metadata?.priceId;
 
         if (!userId) {
-          console.error("No userId in session metadata");
+          console.error("Missing checkout metadata: userId");
           throw new Error("Missing checkout metadata: userId");
         }
 
         if (!subscriptionId) {
-          console.error("No subscriptionId in session");
+          console.error("Missing subscription id");
           throw new Error("Missing subscription id");
         }
 
         const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-        const priceId = subscription.items.data[0].price.id;
+        const actualPriceId = subscription.items.data[0].price.id;
 
         let planType = "free";
-        if (priceId === env.STRIPE_PRICE_ID_PRO) {
+        if (actualPriceId === process.env.STRIPE_PRICE_ID_PRO) {
           planType = "pro";
-        } else if (priceId === env.STRIPE_PRICE_ID_TEAM) {
+        } else if (actualPriceId === process.env.STRIPE_PRICE_ID_TEAM) {
           planType = "team";
         }
 
@@ -96,7 +99,7 @@ export async function POST(req: Request) {
           workspace_id: workspaceId || null,
           stripe_customer_id: customerId,
           stripe_subscription_id: subscriptionId,
-          stripe_price_id: priceId,
+          stripe_price_id: actualPriceId,
           status: subscription.status,
           plan_type: planType,
           current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
@@ -142,9 +145,9 @@ export async function POST(req: Request) {
         }
 
         let planType = "free";
-        if (priceId === env.STRIPE_PRICE_ID_PRO) {
+        if (priceId === process.env.STRIPE_PRICE_ID_PRO) {
           planType = "pro";
-        } else if (priceId === env.STRIPE_PRICE_ID_TEAM) {
+        } else if (priceId === process.env.STRIPE_PRICE_ID_TEAM) {
           planType = "team";
         }
 
