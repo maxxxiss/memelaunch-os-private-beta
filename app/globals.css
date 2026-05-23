@@ -7,3 +7,20 @@
     @apply bg-[#05070d] text-white font-sans antialiased;
   }
 }
+
+@layer utilities {
+  .hero-glow {
+    background:
+      radial-gradient(ellipse 100% 60% at 50% -5%, rgba(59, 130, 246, 0.18) 0%, transparent 65%),
+      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 55%);
+  }
+  .grid-bg {
+    background-image:
+      linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    background-size: 52px 52px;
+  }
+  .glow-blue {
+    box-shadow: 0 0 48px -12px rgba(59, 130, 246, 0.45);
+  }
+}

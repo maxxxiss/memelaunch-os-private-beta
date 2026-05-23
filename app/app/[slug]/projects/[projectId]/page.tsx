@@ -15,6 +15,7 @@ import { ProjectLinks } from "@/components/launch/ProjectLinks";
 import { ReadinessBreakdown } from "@/components/launch/ReadinessBreakdown";
 import { LaunchTimeline } from "@/components/launch/LaunchTimeline";
 import { LaunchPlanSummary } from "@/components/launch/LaunchPlanSummary";
+import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import Link from "next/link";
 
 export default async function ProjectDetailPage({
@@ -90,121 +91,106 @@ export default async function ProjectDetailPage({
     contentTotal
   );
 
+  const readinessPct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
   return (
-    <div className="min-h-screen bg-[#05070d] p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="mb-8">
-          <Link
-            href={`/app/${slug}`}
-            className="text-sm text-slate-300 hover:text-white mb-4 inline-block"
-          >
-            ← Back to dashboard
-          </Link>
-          <h1 className="text-3xl font-bold text-white mb-2 tracking-tight">{project.name}</h1>
-          <p className="text-slate-300">{project.ticker} · {project.chain}</p>
-        </div>
+    <div className="min-h-screen bg-[#05070d] flex">
+      <DashboardSidebar workspaceSlug={slug} projectId={projectId} projectName={project.name} />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
-            <h3 className="font-semibold text-white mb-2">Status</h3>
-            <div className="text-lg font-medium text-white capitalize">
-              {project.status.replace('_', ' ')}
+      <main className="flex-1 overflow-auto">
+        {/* Sticky header */}
+        <header className="sticky top-0 z-10 bg-[#05070d]/90 backdrop-blur-sm border-b border-white/8 px-8 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Link href={`/app/${slug}`} className="text-xs text-slate-500 hover:text-slate-300 transition-colors">← Dashboard</Link>
+            <span className="text-slate-700">/</span>
+            <h1 className="text-sm font-semibold text-white">{project.name}</h1>
+            <span className="px-2 py-0.5 bg-[#0d1117] border border-white/8 rounded text-xs text-slate-400 capitalize">{project.status.replace("_", " ")}</span>
+          </div>
+          <div className="flex items-center gap-3 text-xs text-slate-500">
+            <span className="font-mono text-blue-400">${project.ticker}</span>
+            <span>{project.chain}</span>
+          </div>
+        </header>
+
+        <div className="px-8 py-8 max-w-5xl">
+          {/* Hero stats */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-6 md:col-span-2">
+              <p className="text-xs text-slate-500 uppercase tracking-widest font-medium mb-3">Launch Readiness</p>
+              <div className="text-5xl font-bold text-white mb-3">{readiness.totalScore}<span className="text-2xl text-slate-500">%</span></div>
+              <div className="w-full bg-white/5 rounded-full h-2 mb-2">
+                <div className="bg-blue-500 h-2 rounded-full transition-all" style={{ width: `${readiness.totalScore}%` }} />
+              </div>
+              <p className="text-xs text-slate-600">Based on checklist, tasks, links, and content</p>
+            </div>
+            <div className="space-y-3">
+              <div className="bg-[#0d1117] border border-white/8 rounded-xl p-4">
+                <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Checklist</p>
+                <p className="text-xl font-bold text-white">{completed}<span className="text-sm text-slate-500">/{total}</span></p>
+                <div className="w-full bg-white/5 rounded-full h-1 mt-2">
+                  <div className="bg-white/40 h-1 rounded-full" style={{ width: `${readinessPct}%` }} />
+                </div>
+              </div>
+              <div className="bg-[#0d1117] border border-white/8 rounded-xl p-4">
+                <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Launch Date</p>
+                <p className="text-sm font-semibold text-white">{project.launch_date ? new Date(project.launch_date).toLocaleDateString() : <span className="text-slate-600">Not set</span>}</p>
+              </div>
             </div>
           </div>
-          <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
-            <h3 className="font-semibold text-white mb-2">Readiness</h3>
-            <div className="text-3xl font-bold text-blue-500 mb-1">{readiness.totalScore}%</div>
-            <p className="text-sm text-slate-300">Launch readiness score</p>
+
+          {project.description && (
+            <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-6 mb-8">
+              <p className="text-xs text-slate-500 uppercase tracking-widest mb-2">About</p>
+              <p className="text-sm text-slate-400 leading-relaxed">{project.description}</p>
+            </div>
+          )}
+
+          {/* Checklist */}
+          <div id="checklist" className="bg-[#0d1117] border border-white/8 rounded-2xl p-6 mb-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="font-semibold text-white">Launch Checklist</h2>
+                <p className="text-xs text-slate-500 mt-0.5">{completed} of {total} items completed</p>
+              </div>
+              <span className="text-sm font-bold text-white">{readinessPct}%</span>
+            </div>
+            <div className="w-full bg-white/5 rounded-full h-1.5 mb-6">
+              <div className="bg-blue-500 h-1.5 rounded-full transition-all" style={{ width: `${readinessPct}%` }} />
+            </div>
+            <ProjectChecklist projectId={projectId} items={checklist} />
           </div>
-          <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
-            <h3 className="font-semibold text-white mb-2">Launch Date</h3>
-            <div className="text-lg font-medium text-white">
-              {project.launch_date
-                ? new Date(project.launch_date).toLocaleDateString()
-                : "Not set"}
+
+          {/* Tasks + Content */}
+          <div id="tasks" className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+            <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-6">
+              <h2 className="font-semibold text-white mb-4">Tasks</h2>
+              <TaskList tasks={tasks} />
+              <div className="mt-5 pt-5 border-t border-white/8">
+                <CreateTaskForm workspaceId={workspace.id} workspaceSlug={workspace.slug} projectId={projectId} />
+              </div>
+            </div>
+            <div id="content" className="bg-[#0d1117] border border-white/8 rounded-2xl p-6">
+              <h2 className="font-semibold text-white mb-4">Content Plan</h2>
+              <ContentList items={contentItems} />
+              <div className="mt-5 pt-5 border-t border-white/8">
+                <CreateContentForm workspaceId={workspace.id} workspaceSlug={workspace.slug} projectId={projectId} />
+              </div>
             </div>
           </div>
-        </div>
 
-        {project.description && (
-          <div className="bg-[#111827] p-6 rounded-2xl border border-white/10 mb-8">
-            <h3 className="font-semibold text-white mb-2">Description</h3>
-            <p className="text-slate-300">{project.description}</p>
+          {/* Readiness + Links */}
+          <div id="readiness" className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+            <ReadinessBreakdown breakdown={readiness} />
+            <ProjectLinks projectId={projectId} workspaceId={workspace.id} workspaceSlug={workspace.slug} links={links} />
           </div>
-        )}
 
-        <div className="bg-[#111827] p-6 rounded-2xl border border-white/10 mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-white">Launch Checklist</h2>
-            <div className="text-sm text-slate-300">{completed}/{total} completed</div>
-          </div>
-          <div className="w-full bg-[#0b1020] rounded-full h-2 mb-6">
-            <div
-              className="bg-blue-500 h-2 rounded-full transition-all"
-              style={{ width: `${total > 0 ? (completed / total) * 100 : 0}%` }}
-            />
-          </div>
-          <ProjectChecklist projectId={projectId} items={checklist} />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <div>
-            <h2 className="text-xl font-bold text-white mb-4">Tasks</h2>
-            <TaskList tasks={tasks} />
-            <div className="mt-4">
-              <CreateTaskForm workspaceId={workspace.id} workspaceSlug={workspace.slug} projectId={projectId} />
-            </div>
-          </div>
-          <div>
-            <h2 className="text-xl font-bold text-white mb-4">Content Plan</h2>
-            <ContentList items={contentItems} />
-            <div className="mt-4">
-              <CreateContentForm workspaceId={workspace.id} workspaceSlug={workspace.slug} projectId={projectId} />
-            </div>
+          <div className="mb-6"><LaunchTimeline tasks={tasks} contentItems={contentItems} /></div>
+          <div className="mb-6"><LaunchPlanSummary project={project} links={links} checklist={checklist} tasks={tasks} contentItems={contentItems} readiness={readiness} /></div>
+          <div className="mb-8">
+            <ProjectSettingsForm projectId={projectId} workspaceId={workspace.id} workspaceSlug={workspace.slug} initialData={{ name: project.name, ticker: project.ticker, chain: project.chain, launch_date: project.launch_date, status: project.status, description: project.description }} />
           </div>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <ReadinessBreakdown breakdown={readiness} />
-          <ProjectLinks
-            projectId={projectId}
-            workspaceId={workspace.id}
-            workspaceSlug={workspace.slug}
-            links={links}
-          />
-        </div>
-
-        <div className="mb-8">
-          <LaunchTimeline tasks={tasks} contentItems={contentItems} />
-        </div>
-
-        <div className="mb-8">
-          <LaunchPlanSummary
-            project={project}
-            links={links}
-            checklist={checklist}
-            tasks={tasks}
-            contentItems={contentItems}
-            readiness={readiness}
-          />
-        </div>
-
-        <div className="mb-8">
-          <ProjectSettingsForm
-            projectId={projectId}
-            workspaceId={workspace.id}
-            workspaceSlug={workspace.slug}
-            initialData={{
-              name: project.name,
-              ticker: project.ticker,
-              chain: project.chain,
-              launch_date: project.launch_date,
-              status: project.status,
-              description: project.description,
-            }}
-          />
-        </div>
-      </div>
+      </main>
     </div>
   );
 }

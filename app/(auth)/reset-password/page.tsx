@@ -34,16 +34,17 @@ export default function ResetPasswordPage() {
 
   if (sent) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-surface-muted">
-        <div className="w-full max-w-md p-8 bg-surface rounded-card shadow-soft">
-          <h1 className="text-2xl font-bold text-content mb-6">Check your email</h1>
-          <p className="text-content-muted">
-            We sent a password reset link to {email}. Click the link to reset your password.
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#05070d] px-4">
+        <a href="/" className="text-lg font-bold text-white mb-8 tracking-tight">MemeLaunch OS</a>
+        <div className="w-full max-w-md p-8 bg-[#111827] rounded-2xl border border-white/10 text-center">
+          <div className="w-10 h-10 bg-emerald-500/15 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+          </div>
+          <h1 className="text-xl font-bold text-white mb-3">Check your email</h1>
+          <p className="text-sm text-slate-400 mb-6">
+            We sent a reset link to <span className="text-white">{email}</span>. Click the link to set a new password.
           </p>
-          <a
-            href="/auth/login"
-            className="mt-4 inline-block text-brand-600 hover:underline"
-          >
+          <a href="/login" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
             Back to sign in
           </a>
         </div>
@@ -52,19 +53,21 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-surface-muted">
-      <div className="w-full max-w-md p-8 bg-surface rounded-card shadow-soft">
-        <h1 className="text-2xl font-bold text-content mb-6">Reset password</h1>
-        <form onSubmit={handleSubmit} className="space-y-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#05070d] px-4">
+      <a href="/" className="text-lg font-bold text-white mb-8 tracking-tight">MemeLaunch OS</a>
+      <div className="w-full max-w-md p-8 bg-[#111827] rounded-2xl border border-white/10">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-white mb-2">Reset your password</h1>
+          <p className="text-sm text-slate-400">Enter your email and we&apos;ll send a reset link.</p>
+        </div>
+        <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="p-3 bg-surface-subtle border border-content-subtle rounded-card text-content text-sm">
+            <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
               {error}
             </div>
           )}
           <div>
-            <label htmlFor="email" className="block text-sm text-content-muted mb-1">
-              Email
-            </label>
+            <label htmlFor="email" className="block text-sm text-slate-300 mb-1.5 font-medium">Email</label>
             <input
               id="email"
               name="email"
@@ -72,22 +75,20 @@ export default function ResetPasswordPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-3 py-2 bg-surface-muted border border-surface-subtle rounded-card text-content"
+              className="w-full px-3 py-2.5 bg-[#0b1020] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-600"
               placeholder="you@example.com"
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-card font-medium disabled:opacity-50"
+            className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm disabled:opacity-50 transition-colors"
           >
             {loading ? "Sending..." : "Send reset link"}
           </button>
         </form>
-        <p className="mt-4 text-sm text-content-muted text-center">
-          <a href="/auth/login" className="text-brand-600 hover:underline">
-            Back to sign in
-          </a>
+        <p className="mt-6 text-sm text-slate-500 text-center">
+          <a href="/login" className="text-blue-400 hover:text-blue-300 transition-colors">Back to sign in</a>
         </p>
       </div>
     </div>

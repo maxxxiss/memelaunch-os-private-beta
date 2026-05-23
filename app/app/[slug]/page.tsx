@@ -1,6 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { SignOutButton } from "@/components/auth/SignOutButton";
 import { getWorkspaceLaunchProjects } from "@/lib/actions/launch-project";
 import { getWorkspaceTasks } from "@/lib/actions/task";
 import { getWorkspaceContentItems } from "@/lib/actions/content";
@@ -105,18 +104,18 @@ export default async function WorkspacePage({
     <div className="min-h-screen bg-[#05070d] flex">
       <DashboardSidebar workspaceSlug={workspace.slug} />
 
-      <main className="flex-1 p-6">
-        <header className="flex justify-between items-center mb-8">
+      <main className="flex-1 overflow-auto">
+        <header className="sticky top-0 z-10 bg-[#05070d]/90 backdrop-blur-sm border-b border-white/8 px-8 py-4 flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">Dashboard</h1>
-            <p className="text-slate-300 text-sm">Launch command center</p>
+            <h1 className="text-lg font-bold text-white tracking-tight">Dashboard</h1>
+            <p className="text-xs text-slate-500">{workspace.name}</p>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <PlanBadge plan={effectivePlan} />
-            <SignOutButton />
           </div>
         </header>
 
+        <div className="px-8 py-8">
         {checkout === "success" && <CheckoutSuccessMessage />}
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -173,12 +172,13 @@ export default async function WorkspacePage({
             )}
           </div>
 
-          <div className="bg-[#111827] p-6 rounded-2xl border border-white/10 md:col-span-2 lg:col-span-3">
-            <h3 className="font-semibold text-white mb-2">Metrics</h3>
-            <p className="text-sm text-slate-300">
-              Token metrics coming soon. Connect your token to track holder count, volume, and community growth.
+          <div className="bg-[#0d1117] p-6 rounded-2xl border border-white/8 md:col-span-2 lg:col-span-3">
+            <p className="text-xs text-slate-500 uppercase tracking-widest font-medium mb-2">Token Metrics</p>
+            <p className="text-sm text-slate-500">
+              Connect your deployed token to track holder count, volume, and community growth post-launch.
             </p>
           </div>
+        </div>
         </div>
       </main>
     </div>

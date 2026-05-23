@@ -59,44 +59,42 @@ export function TaskList({ tasks }: TaskListProps) {
 
   if (tasks.length === 0) {
     return (
-      <div className="text-center py-6">
-        <p className="text-sm text-slate-300 mb-1">No tasks yet</p>
-        <p className="text-xs text-slate-400">Create a task to get started</p>
+      <div className="py-8 text-center border border-dashed border-white/10 rounded-xl">
+        <p className="text-sm text-slate-400 mb-1">No launch tasks yet</p>
+        <p className="text-xs text-slate-600">Assign your first task to start organizing the team.</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {error && (
-        <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
-          {error}
-        </div>
+        <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">{error}</div>
       )}
       {localTasks.map((task) => (
-        <div key={task.id} className="p-4 bg-[#0b1020] rounded-lg border border-white/10">
-          <div className="flex justify-between items-start mb-2">
-            <div className="flex-1">
-              <div className="font-medium text-white mb-1">{task.title}</div>
+        <div key={task.id} className="p-4 bg-[#070b14] rounded-xl border border-white/6 hover:border-white/10 transition-colors">
+          <div className="flex items-start justify-between gap-3 mb-2">
+            <div className="flex-1 min-w-0">
+              <div className={`text-sm font-medium mb-0.5 ${task.status === "done" ? "text-slate-500 line-through" : "text-white"}`}>
+                {task.title}
+              </div>
               {task.description && (
-                <div className="text-sm text-slate-300">{task.description}</div>
+                <div className="text-xs text-slate-500 leading-relaxed">{task.description}</div>
               )}
             </div>
-            <span className={`px-2 py-1 rounded text-xs ${STATUS_BADGES[task.status].bg} ${STATUS_BADGES[task.status].text} border border-white/10`}>
+            <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-medium border ${STATUS_BADGES[task.status].bg} ${STATUS_BADGES[task.status].text} border-white/8`}>
               {STATUS_BADGES[task.status].label}
             </span>
           </div>
-          <div className="flex items-center gap-4 text-xs text-slate-300 mt-2">
-            <span className={PRIORITY_COLORS[task.priority]}>
-              {PRIORITY_LABELS[task.priority]} priority
-            </span>
-            {task.assignee_name && <span>Assigned to: {task.assignee_name}</span>}
-            {task.due_date && <span>Due: {new Date(task.due_date).toLocaleDateString()}</span>}
+          <div className="flex items-center gap-3 text-[10px] text-slate-600 mb-2">
+            <span className={`font-medium ${PRIORITY_COLORS[task.priority]}`}>{PRIORITY_LABELS[task.priority]}</span>
+            {task.assignee_name && <span>→ {task.assignee_name}</span>}
+            {task.due_date && <span>{new Date(task.due_date).toLocaleDateString()}</span>}
           </div>
           <select
             value={task.status}
             onChange={(e) => handleStatusChange(task.id, e.target.value)}
-            className="mt-3 w-full px-2 py-1 bg-[#111827] border border-white/10 rounded text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-2.5 py-1.5 bg-white/5 border border-white/8 rounded-lg text-xs text-slate-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             <option value="todo">To Do</option>
             <option value="in_progress">In Progress</option>
