@@ -11,6 +11,7 @@ import { DashboardMetrics } from "@/components/dashboard/DashboardMetrics";
 import Link from "next/link";
 import { CheckoutSuccessMessage } from "../CheckoutSuccessMessage";
 import { syncUserSubscriptionToWorkspace, getEffectiveWorkspacePlan } from "@/lib/actions/subscription";
+import { PlanBadge } from "@/components/dashboard/PlanBadge";
 
 export default async function WorkspacePage({
   params,
@@ -111,9 +112,7 @@ export default async function WorkspacePage({
             <p className="text-slate-300 text-sm">Launch command center</p>
           </div>
           <div className="flex items-center gap-4">
-            <span className="px-3 py-1 bg-[#111827] border border-white/10 rounded-full text-sm text-slate-300 capitalize">
-              {effectivePlan} plan
-            </span>
+            <PlanBadge plan={effectivePlan} />
             <SignOutButton />
           </div>
         </header>

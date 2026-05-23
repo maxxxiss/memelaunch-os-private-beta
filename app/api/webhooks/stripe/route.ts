@@ -98,18 +98,29 @@ export async function POST(req: Request) {
           planType = "team";
         }
 
-        const { error: subError } = await supabase.from("subscriptions").upsert({
-          user_id: userId,
-          workspace_id: workspaceId || null,
-          stripe_customer_id: customerId,
-          stripe_subscription_id: subscriptionId,
-          stripe_price_id: actualPriceId,
+        console.log("checkout.session.completed", {
+          userId,
+          workspaceId: workspaceId || null,
+          subscriptionId,
+          planType,
           status: subscription.status,
-          plan_type: planType,
-          current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
-          current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
-          cancel_at_period_end: subscription.cancel_at_period_end,
         });
+
+        const { error: subError } = await supabase.from("subscriptions").upsert(
+          {
+            user_id: userId,
+            workspace_id: workspaceId || null,
+            stripe_customer_id: customerId,
+            stripe_subscription_id: subscriptionId,
+            stripe_price_id: actualPriceId,
+            status: subscription.status,
+            plan_type: planType,
+            current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+            current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+            cancel_at_period_end: subscription.cancel_at_period_end,
+          },
+          { onConflict: "stripe_subscription_id" }
+        );
 
         if (subError) {
           console.error("Supabase subscription upsert failed:", subError);
