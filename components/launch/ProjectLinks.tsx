@@ -2,6 +2,9 @@
 
 import { addProjectLink, removeProjectLink } from "@/lib/actions/project-link";
 import { useState } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { Link as LinkIcon } from "lucide-react";
 
 interface ProjectLink {
   id: string;
@@ -52,16 +55,20 @@ export function ProjectLinks({ projectId, workspaceId, workspaceSlug, links }: P
     <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
       <h3 className="text-lg font-semibold text-white mb-4">Project Links</h3>
       {error && (
-        <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm mb-4">
-          {error}
-        </div>
+        <ErrorMessage
+          title="Failed to update links"
+          message={error}
+          onRetry={() => setError(null)}
+        />
       )}
       <div className="space-y-2 mb-6">
         {links.length === 0 ? (
-          <div className="text-center py-6">
-            <p className="text-sm text-slate-300 mb-1">No links added yet</p>
-            <p className="text-xs text-slate-400">Add your project links below</p>
-          </div>
+          <EmptyState
+            icon={LinkIcon}
+            title="No links added yet"
+            description="Add your X, Telegram, Discord, website, chart, and docs links. Required links (X and Telegram) improve your launch readiness score."
+            variant="default"
+          />
         ) : (
           links.map((link) => (
             <div key={link.id} className="flex justify-between items-center p-3 bg-[#0b1020] rounded-lg border border-white/10">

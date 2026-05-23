@@ -2,6 +2,9 @@
 
 import { updateTaskStatus } from "@/lib/actions/task";
 import { useState } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { CheckSquare } from "lucide-react";
 
 interface Task {
   id: string;
@@ -59,17 +62,23 @@ export function TaskList({ tasks }: TaskListProps) {
 
   if (tasks.length === 0) {
     return (
-      <div className="py-8 text-center border border-dashed border-white/10 rounded-xl">
-        <p className="text-sm text-slate-400 mb-1">No launch tasks yet</p>
-        <p className="text-xs text-slate-600">Assign your first task to start organizing the team.</p>
-      </div>
+      <EmptyState
+        icon={CheckSquare}
+        title="No launch tasks yet"
+        description="Assign your first task to start turning launch chaos into an execution plan. Track priorities, due dates, and assignees in one place."
+        variant="default"
+      />
     );
   }
 
   return (
     <div className="space-y-2">
       {error && (
-        <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">{error}</div>
+        <ErrorMessage
+          title="Failed to update task"
+          message={error}
+          onRetry={() => setError(null)}
+        />
       )}
       {localTasks.map((task) => (
         <div key={task.id} className="p-4 bg-[#070b14] rounded-xl border border-white/6 hover:border-white/10 transition-colors">

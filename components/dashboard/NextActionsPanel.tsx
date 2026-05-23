@@ -50,7 +50,7 @@ export function NextActionsPanel({
             <ActionRow label="Schedule your first content post" href={`/app/${slug}`} accent="bg-violet-400" />
           )}
           {isFree && (
-            <ActionRow label="Upgrade for unlimited projects" href="/pricing" accent="bg-amber-400" />
+            <ActionRow label="Upgrade to Pro for unlimited projects" href="/pricing" accent="bg-amber-400" />
           )}
         </div>
       )}

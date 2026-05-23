@@ -25,7 +25,7 @@ export default function RegisterPage() {
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-white mb-2">Create your account</h1>
           <p className="text-sm text-slate-400">
-            Free to start. No credit card required.
+            Free to start. No credit card required. After signing up, you'll create your launch command center.
           </p>
         </div>
         <form action={handleSubmit} className="space-y-4">

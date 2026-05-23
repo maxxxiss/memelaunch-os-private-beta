@@ -2,6 +2,9 @@
 
 import { updateContentStatus } from "@/lib/actions/content";
 import { useState } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { Calendar } from "lucide-react";
 
 interface ContentItem {
   id: string;
@@ -53,17 +56,23 @@ export function ContentList({ items }: ContentListProps) {
 
   if (items.length === 0) {
     return (
-      <div className="py-8 text-center border border-dashed border-white/10 rounded-xl">
-        <p className="text-sm text-slate-400 mb-1">No content scheduled yet</p>
-        <p className="text-xs text-slate-600">Add posts for X, Telegram, Discord, or your website.</p>
-      </div>
+      <EmptyState
+        icon={Calendar}
+        title="No content scheduled yet"
+        description="Plan launch posts before the timeline gets noisy. Schedule content for X, Telegram, Discord, or your website to keep your launch on track."
+        variant="default"
+      />
     );
   }
 
   return (
     <div className="space-y-2">
       {error && (
-        <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">{error}</div>
+        <ErrorMessage
+          title="Failed to update content"
+          message={error}
+          onRetry={() => setError(null)}
+        />
       )}
       {localItems.map((item) => (
         <div key={item.id} className="p-4 bg-[#070b14] rounded-xl border border-white/6 hover:border-white/10 transition-colors">

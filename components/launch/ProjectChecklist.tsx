@@ -2,6 +2,9 @@
 
 import { toggleChecklistItem } from "@/lib/actions/launch-project";
 import { useState } from "react";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { ListTodo } from "lucide-react";
 
 interface ChecklistItem {
   id: string;
@@ -45,17 +48,23 @@ export function ProjectChecklist({ projectId, items }: ProjectChecklistProps) {
 
   if (localItems.length === 0) {
     return (
-      <div className="py-8 text-center border border-dashed border-white/10 rounded-xl">
-        <p className="text-sm text-slate-400 mb-1">No checklist items yet</p>
-        <p className="text-xs text-slate-600">Items are generated automatically when you create a project</p>
-      </div>
+      <EmptyState
+        icon={ListTodo}
+        title="No checklist items yet"
+        description="Build your pre-launch checklist to track what is ready and what still needs work. Items are generated automatically when you create a project."
+        variant="default"
+      />
     );
   }
 
   return (
     <div className="space-y-6">
       {error && (
-        <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">{error}</div>
+        <ErrorMessage
+          title="Failed to update checklist"
+          message={error}
+          onRetry={() => setError(null)}
+        />
       )}
       {sections.map((section) => {
         const sectionItems = localItems.filter((i) => i.section === section).sort((a, b) => a.order_index - b.order_index);
