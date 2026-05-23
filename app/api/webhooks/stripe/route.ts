@@ -1,8 +1,10 @@
-import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { createServiceClient } from "@/lib/supabase/server";
 import { env } from "@/lib/env";
 import Stripe from "stripe";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
 
 const stripe = env.STRIPE_SECRET_KEY ? new Stripe(env.STRIPE_SECRET_KEY) : null;
 
@@ -24,8 +26,7 @@ export async function POST(req: Request) {
   }
 
   const body = await req.text();
-  const headersList = await headers();
-  const signature = headersList.get("stripe-signature");
+  const signature = req.headers.get("stripe-signature");
 
   if (!signature) {
     console.error("Missing stripe-signature header");
