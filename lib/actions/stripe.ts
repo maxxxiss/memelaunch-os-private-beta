@@ -49,11 +49,12 @@ export async function createCheckoutSession(priceId: string) {
 
   const { data: subscription } = await supabase
     .from("subscriptions")
-    .select("stripe_customer_id")
+    .select("stripe_customer_id, workspace_id")
     .eq("user_id", user.id)
     .single();
 
   let customerId = subscription?.stripe_customer_id;
+  const workspaceId = subscription?.workspace_id;
 
   if (!customerId) {
     const customer = await stripe.customers.create({
@@ -62,6 +63,8 @@ export async function createCheckoutSession(priceId: string) {
     });
     customerId = customer.id;
   }
+
+  const plan = isProPrice ? "pro" : isTeamPrice ? "team" : "free";
 
   const session = await stripe.checkout.sessions.create({
     customer: customerId,
@@ -75,6 +78,12 @@ export async function createCheckoutSession(priceId: string) {
     ],
     success_url: `${env.NEXT_PUBLIC_APP_URL}/app?checkout=success`,
     cancel_url: `${env.NEXT_PUBLIC_APP_URL}/pricing?checkout=canceled`,
+    metadata: {
+      userId: user.id,
+      workspaceId: workspaceId || "",
+      plan,
+      priceId,
+    },
   });
 
   return { url: session.url };
