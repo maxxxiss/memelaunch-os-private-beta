@@ -5,16 +5,10 @@ import Stripe from "stripe";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
-
-if (!stripeSecretKey) {
-  throw new Error("Missing STRIPE_SECRET_KEY");
-}
-
-const stripe = new Stripe(stripeSecretKey);
-
 export async function POST(req: Request) {
+  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET?.trim();
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY?.trim();
+
   if (!webhookSecret) {
     console.error("Missing STRIPE_WEBHOOK_SECRET");
     return NextResponse.json(
@@ -22,6 +16,16 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
+
+  if (!stripeSecretKey) {
+    console.error("Missing STRIPE_SECRET_KEY");
+    return NextResponse.json(
+      { error: "Missing STRIPE_SECRET_KEY" },
+      { status: 400 }
+    );
+  }
+
+  const stripe = new Stripe(stripeSecretKey);
 
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");

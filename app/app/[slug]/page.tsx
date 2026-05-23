@@ -10,6 +10,7 @@ import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardMetrics } from "@/components/dashboard/DashboardMetrics";
 import Link from "next/link";
 import { CheckoutSuccessMessage } from "../CheckoutSuccessMessage";
+import { syncUserSubscriptionToWorkspace, getEffectiveWorkspacePlan } from "@/lib/actions/subscription";
 
 export default async function WorkspacePage({
   params,
@@ -49,6 +50,9 @@ export default async function WorkspacePage({
   if (!member) {
     redirect("/app");
   }
+
+  await syncUserSubscriptionToWorkspace(user.id, workspace.id);
+  const effectivePlan = await getEffectiveWorkspacePlan(user.id, workspace.id);
 
   const projects = await getWorkspaceLaunchProjects(workspace.id);
   const activeProject = projects?.[0] || null;
@@ -108,7 +112,7 @@ export default async function WorkspacePage({
           </div>
           <div className="flex items-center gap-4">
             <span className="px-3 py-1 bg-[#111827] border border-white/10 rounded-full text-sm text-slate-300 capitalize">
-              {workspace.plan} plan
+              {effectivePlan} plan
             </span>
             <SignOutButton />
           </div>

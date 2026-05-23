@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { TEMPLATES } from "@/lib/templates/launch-templates";
+import { getEffectiveWorkspacePlan } from "./subscription";
 
 const createLaunchProjectSchema = z.object({
   workspaceId: z.string().uuid(),
@@ -55,13 +56,9 @@ export async function createLaunchProject(formData: FormData) {
     return { error: "Not authenticated" };
   }
 
-  const { data: workspace } = await supabase
-    .from("workspaces")
-    .select("plan")
-    .eq("id", result.data.workspaceId)
-    .single();
+  const effectivePlan = await getEffectiveWorkspacePlan(user.id, result.data.workspaceId);
 
-  if (workspace?.plan === "free") {
+  if (effectivePlan === "free") {
     const { count: projectCount } = await supabase
       .from("launch_projects")
       .select("*", { count: "exact", head: true })
