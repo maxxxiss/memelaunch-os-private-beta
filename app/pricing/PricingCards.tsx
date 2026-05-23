@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { createCheckoutSession } from "@/lib/actions/stripe";
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams, usePathname } from "next/navigation";
 
 interface PricingCardsProps {
   proPriceId: string;
@@ -13,20 +13,64 @@ interface PricingCardsProps {
 
 export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: PricingCardsProps) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const checkoutStatus = searchParams.get("checkout");
   const [loading, setLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const resetLoading = () => {
+    setLoading(null);
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+  };
 
   useEffect(() => {
-    if (checkoutStatus === "cancelled") {
-      setLoading(null);
-      setError(null);
-    }
-  }, [checkoutStatus]);
+    resetLoading();
+    setError(null);
+  }, [checkoutStatus, pathname]);
+
+  useEffect(() => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        resetLoading();
+      }
+    };
+
+    const handleFocus = () => {
+      resetLoading();
+    };
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        resetLoading();
+      }
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("focus", handleFocus);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleCheckout = async (priceId: string, planName: string) => {
     setLoading(planName);
     setError(null);
+
+    timeoutRef.current = setTimeout(() => {
+      resetLoading();
+      setError("Checkout took too long. Please try again.");
+    }, 10000);
 
     try {
       const result = await createCheckoutSession(priceId);
@@ -34,8 +78,8 @@ export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: Pric
         window.location.href = result.url;
       }
     } catch (err) {
+      resetLoading();
       setError(err instanceof Error ? err.message : "Failed to start checkout");
-      setLoading(null);
     }
   };
 

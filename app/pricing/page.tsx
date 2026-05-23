@@ -1,7 +1,12 @@
 import { env } from "@/lib/env";
 import { PricingCards } from "./PricingCards";
 
-export default function PricingPage() {
+export default async function PricingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ checkout?: string }>;
+}) {
+  const { checkout } = await searchParams;
   const errors: string[] = [];
 
   if (!env.STRIPE_SECRET_KEY) {
@@ -46,6 +51,7 @@ export default function PricingPage() {
         )}
 
         <PricingCards
+          key={checkout || "default"}
           proPriceId={env.STRIPE_PRICE_ID_PRO || ""}
           teamPriceId={env.STRIPE_PRICE_ID_TEAM || ""}
           stripeConfigured={stripeConfigured}
