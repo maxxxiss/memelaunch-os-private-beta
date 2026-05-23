@@ -19,11 +19,12 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#05070d]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#05070d] px-4">
+      <Link href="/" className="text-lg font-bold text-white mb-8 tracking-tight">MemeLaunch OS</Link>
       <div className="w-full max-w-md p-8 bg-[#111827] rounded-2xl border border-white/10">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-white mb-2">Sign in</h1>
-          <p className="text-sm text-slate-300">
+          <p className="text-sm text-slate-400">
             Access your launch command center
           </p>
         </div>
@@ -67,12 +68,15 @@ export default function LoginPage() {
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
-        <p className="mt-6 text-sm text-slate-300 text-center">
-          Don't have an account?{" "}
-          <Link href="/register" className="text-blue-400 hover:underline">
-            Sign up
+        <div className="mt-6 flex flex-col gap-3 text-center">
+          <p className="text-sm text-slate-400">
+            Don&apos;t have an account?{" "}
+            <Link href="/register" className="text-blue-400 hover:underline">Sign up</Link>
+          </p>
+          <Link href="/reset-password" className="text-sm text-slate-500 hover:text-slate-300 transition-colors">
+            Forgot password?
           </Link>
-        </p>
+        </div>
       </div>
     </div>
   );

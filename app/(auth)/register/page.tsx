@@ -19,12 +19,13 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#05070d]">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-[#05070d] px-4">
+      <Link href="/" className="text-lg font-bold text-white mb-8 tracking-tight">MemeLaunch OS</Link>
       <div className="w-full max-w-md p-8 bg-[#111827] rounded-2xl border border-white/10">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-white mb-2">Create account</h1>
-          <p className="text-sm text-slate-300">
-            Start organizing your memecoin launch
+          <h1 className="text-2xl font-bold text-white mb-2">Create your account</h1>
+          <p className="text-sm text-slate-400">
+            Free to start. No credit card required.
           </p>
         </div>
         <form action={handleSubmit} className="space-y-4">
@@ -80,11 +81,9 @@ export default function RegisterPage() {
             {loading ? "Creating account..." : "Sign up"}
           </button>
         </form>
-        <p className="mt-6 text-sm text-slate-300 text-center">
+        <p className="mt-6 text-sm text-slate-400 text-center">
           Already have an account?{" "}
-          <Link href="/login" className="text-blue-400 hover:underline">
-            Sign in
-          </Link>
+          <Link href="/login" className="text-blue-400 hover:underline">Sign in</Link>
         </p>
       </div>
     </div>

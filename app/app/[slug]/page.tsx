@@ -144,27 +144,31 @@ export default async function WorkspacePage({
                   <Link
                     key={project.id}
                     href={`/app/${slug}/projects/${project.id}`}
-                    className="block p-4 bg-[#0b1020] rounded-lg border border-white/10 hover:border-white/20 transition-colors"
+                    className="block p-4 bg-[#0b1020] rounded-xl border border-white/8 hover:border-white/20 transition-colors"
                   >
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex-1">
-                        <div className="font-medium text-white mb-1">{project.name}</div>
-                        <div className="text-sm text-slate-300">{project.ticker}</div>
+                    <div className="flex justify-between items-start mb-3">
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-white mb-1 truncate">{project.name}</div>
+                        <div className="text-xs text-blue-400 font-mono">${project.ticker}</div>
                       </div>
-                      <span className="px-2 py-1 bg-[#111827] border border-white/10 rounded text-xs text-slate-300 capitalize">
+                      <span className="ml-2 px-2 py-0.5 bg-[#111827] border border-white/10 rounded text-xs text-slate-400 capitalize shrink-0">
                         {project.status.replace('_', ' ')}
                       </span>
                     </div>
-                    <div className="text-xs text-slate-400">
-                      {project.chain}
-                    </div>
+                    <div className="text-xs text-slate-500">{project.chain}</div>
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-8">
-                <p className="text-sm text-slate-300 mb-2">No launch projects yet</p>
-                <p className="text-xs text-slate-400">Create your first project to get started</p>
+              <div className="text-center py-12 border border-dashed border-white/10 rounded-xl">
+                <p className="text-sm font-medium text-slate-400 mb-1">No launch projects yet</p>
+                <p className="text-xs text-slate-500 mb-4">Create a project to start tracking readiness and tasks</p>
+                <Link
+                  href={`/app/${slug}/new-project`}
+                  className="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-medium transition-colors"
+                >
+                  Create first project
+                </Link>
               </div>
             )}
           </div>
