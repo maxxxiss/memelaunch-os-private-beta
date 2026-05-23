@@ -28,6 +28,12 @@ export async function POST(req: Request) {
   const body = await req.text();
   const signature = req.headers.get("stripe-signature");
 
+  console.log("stripe webhook received", {
+    hasSignature: Boolean(signature),
+    hasWebhookSecret: Boolean(process.env.STRIPE_WEBHOOK_SECRET),
+    bodyLength: body.length,
+  });
+
   if (!signature) {
     console.error("Missing stripe-signature header");
     return NextResponse.json(
@@ -45,7 +51,8 @@ export async function POST(req: Request) {
       env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    console.error("Invalid Stripe webhook signature:", err);
+    const errorMessage = err instanceof Error ? err.message : "Unknown error";
+    console.error("stripe signature verification failed", errorMessage);
     return NextResponse.json(
       { error: "Invalid Stripe webhook signature" },
       { status: 400 }
