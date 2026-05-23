@@ -156,6 +156,13 @@ export default async function AdminDashboard() {
               <div className="font-medium text-white">Manage Projects</div>
               <div className="text-sm text-slate-400">View all launch projects</div>
             </Link>
+            <Link
+              href="/admin/stripe"
+              className="p-4 bg-[#0b1020] rounded-lg border border-white/10 hover:border-white/20 transition-colors"
+            >
+              <div className="font-medium text-white">Stripe Diagnostics</div>
+              <div className="text-sm text-slate-400">Check env vars and key mode</div>
+            </Link>
           </div>
         </div>
       </div>
