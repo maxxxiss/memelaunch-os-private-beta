@@ -7,9 +7,9 @@ import { LaunchCommandVisual } from "@/components/public/LaunchCommandVisual";
 import { LaunchWorkflow } from "@/components/public/LaunchWorkflow";
 
 const FAQ = [
-  { q: "What is MemeLaunch OS?", a: "MemeLaunch OS is a launch planning platform for memecoin and crypto teams — one place for checklists, tasks, content, and readiness tracking." },
+  { q: "What is MemeLaunch OS?", a: "A launch command center for memecoin and crypto teams. Plan launches, assign tasks, track readiness, schedule content, and coordinate your team from one place." },
   { q: "Is this financial or investment advice?", a: "No. MemeLaunch OS is planning and coordination software only. It does not provide financial advice, investment recommendations, or token issuance guidance." },
-  { q: "What does the free plan include?", a: "1 workspace, 1 launch project, the full pre-launch checklist, task management, and content planner." },
+  { q: "What does the free plan include?", a: "1 workspace, 1 launch project, the full pre-launch checklist, task management, and content planner. Free forever." },
   { q: "Can I upgrade later?", a: "Yes. Upgrade to Pro or Team at any time. Your workspace and all data carry over instantly." },
   { q: "How does the readiness score work?", a: "Calculated from checklist completion, open tasks, scheduled content, and key links. It gives your team a live launch readiness percentage." },
 ];
@@ -31,7 +31,7 @@ export default function HomePage() {
               <span className="text-slate-500">not a group chat.</span>
             </h1>
             <p className="text-lg text-slate-400 mb-8 leading-relaxed max-w-lg">
-              Plan launches, assign tasks, track readiness, schedule content, and coordinate your entire team — from one command center.
+              Plan launches, assign tasks, track readiness, schedule content, and coordinate your team — from one command center.
             </p>
             <div className="flex flex-wrap gap-3 mb-6">
               <Link href="/register" className="px-7 py-3.5 bg-white text-[#05070d] rounded-xl font-bold text-sm hover:bg-slate-100 transition-colors glow-blue">
@@ -71,8 +71,8 @@ export default function HomePage() {
       <section className="max-w-4xl mx-auto px-6 py-20 border-t border-white/8">
         <div className="text-center mb-10">
           <p className="text-[10px] text-slate-500 uppercase tracking-[0.2em] font-semibold mb-4">PRICING</p>
-          <h2 className="text-2xl font-bold text-white mb-3">Simple, transparent pricing</h2>
-          <p className="text-slate-500 text-sm">Start free. Upgrade when your team grows.</p>
+          <h2 className="text-2xl font-bold text-white mb-3">Simple pricing for launch teams</h2>
+          <p className="text-slate-500 text-sm">Start free. Upgrade when you scale.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           {[
@@ -118,7 +118,7 @@ export default function HomePage() {
         <div className="cta-glow bg-[#080e1c] border border-blue-500/12 rounded-3xl p-14 text-center">
           <p className="text-[10px] text-blue-400 uppercase tracking-[0.2em] font-semibold mb-4">Get started today</p>
           <h2 className="text-4xl font-bold text-white mb-4 tracking-tight">Run a structured launch.<br className="hidden md:block" /> Not a chaotic one.</h2>
-          <p className="text-slate-400 mb-8 max-w-md mx-auto">Free to start. No credit card required. Upgrade when your team needs more.</p>
+          <p className="text-slate-400 mb-8 max-w-md mx-auto">Free to start. No credit card required. Upgrade when you scale.</p>
           <Link href="/register" className="inline-block px-9 py-4 bg-white text-[#05070d] rounded-xl font-bold text-sm hover:bg-slate-100 transition-colors glow-blue">
             Create your workspace
           </Link>

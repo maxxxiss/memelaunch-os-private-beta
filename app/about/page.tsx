@@ -30,24 +30,26 @@ export default function AboutPage() {
           </p>
         </div>
 
-        <div className="mt-16 p-6 bg-[#0b1020] border border-white/8 rounded-2xl">
-          <h2 className="font-semibold text-white mb-3">What we are</h2>
-          <ul className="space-y-2 text-sm text-slate-400">
-            <li>— A launch planning and coordination platform</li>
-            <li>— A team task and checklist system</li>
-            <li>— A content scheduling tool</li>
-            <li>— A readiness tracking dashboard</li>
-          </ul>
-        </div>
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-6 bg-[#0b1020] border border-white/8 rounded-2xl">
+            <h2 className="font-semibold text-white mb-3 text-sm uppercase tracking-wider">What we are</h2>
+            <ul className="space-y-2 text-sm text-slate-400">
+              <li>— A launch planning and coordination platform</li>
+              <li>— A team task and checklist system</li>
+              <li>— A content scheduling tool</li>
+              <li>— A readiness tracking dashboard</li>
+            </ul>
+          </div>
 
-        <div className="mt-6 p-6 bg-[#0b1020] border border-white/8 rounded-2xl">
-          <h2 className="font-semibold text-white mb-3">What we are not</h2>
-          <ul className="space-y-2 text-sm text-slate-400">
-            <li>— Financial or investment advice</li>
-            <li>— A trading bot, sniper, or automation tool</li>
-            <li>— A token issuance or legal compliance service</li>
-            <li>— A guarantee of any launch outcome</li>
-          </ul>
+          <div className="p-6 bg-[#0b1020] border border-white/8 rounded-2xl">
+            <h2 className="font-semibold text-white mb-3 text-sm uppercase tracking-wider">What we are not</h2>
+            <ul className="space-y-2 text-sm text-slate-400">
+              <li>— Financial or investment advice</li>
+              <li>— A trading bot, sniper, or automation tool</li>
+              <li>— A token issuance or legal compliance service</li>
+              <li>— A guarantee of any launch outcome</li>
+            </ul>
+          </div>
         </div>
 
         <div className="mt-12 flex gap-4">

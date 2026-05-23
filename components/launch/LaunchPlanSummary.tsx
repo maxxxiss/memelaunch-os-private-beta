@@ -152,7 +152,7 @@ export function LaunchPlanSummary({
 
   return (
     <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-5">
         <h3 className="text-lg font-semibold text-white">Launch Plan Summary</h3>
         <button
           onClick={handleCopy}
@@ -161,32 +161,63 @@ export function LaunchPlanSummary({
           {copied ? "Copied!" : "Copy Launch Plan"}
         </button>
       </div>
-      <div className="space-y-4 text-sm text-slate-300">
-        <div>
-          <div className="font-medium text-white mb-1">Project Overview</div>
-          <div>{project.name} ({project.ticker}) on {project.chain}</div>
-          <div>Status: {project.status.replace(/_/g, " ")}</div>
-          <div>Readiness: {readiness.totalScore}%</div>
+      <div className="space-y-5 text-sm">
+        <div className="p-4 bg-[#0b1020] rounded-xl border border-white/8">
+          <div className="font-medium text-white mb-2 text-xs uppercase tracking-wider">Project Overview</div>
+          <div className="space-y-1 text-slate-300">
+            <div className="flex justify-between">
+              <span className="text-slate-500">Name</span>
+              <span className="text-right">{project.name}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Ticker</span>
+              <span className="text-right font-mono text-blue-400">${project.ticker}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Chain</span>
+              <span className="text-right">{project.chain}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Status</span>
+              <span className="text-right capitalize">{project.status.replace(/_/g, " ")}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Readiness</span>
+              <span className="text-right font-semibold text-white">{readiness.totalScore}%</span>
+            </div>
+          </div>
         </div>
-        <div>
-          <div className="font-medium text-white mb-1">Links</div>
+        <div className="p-4 bg-[#0b1020] rounded-xl border border-white/8">
+          <div className="font-medium text-white mb-2 text-xs uppercase tracking-wider">Links</div>
           {links.length === 0 ? (
-            <div className="text-slate-400">No links added yet. Add your X and Telegram links to improve readiness.</div>
+            <div className="text-slate-400 text-xs">No links added yet. Add your X and Telegram links to improve readiness.</div>
           ) : (
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {links.map((link, i) => (
-                <div key={i}>
-                  {LINK_TYPE_LABELS[link.type] || link.type}: {link.url}
+                <div key={i} className="flex justify-between text-slate-300">
+                  <span className="text-slate-500">{LINK_TYPE_LABELS[link.type] || link.type}</span>
+                  <span className="text-right truncate max-w-[180px]" title={link.url}>{link.url}</span>
                 </div>
               ))}
             </div>
           )}
         </div>
-        <div>
-          <div className="font-medium text-white mb-1">Progress</div>
-          <div>Checklist: {checklist.filter((c) => c.completed).length}/{checklist.length} completed</div>
-          <div>Open tasks: {tasks.filter((t) => t.status !== "done").length}</div>
-          <div>Scheduled content: {contentItems.filter((c) => c.status === "scheduled").length}</div>
+        <div className="p-4 bg-[#0b1020] rounded-xl border border-white/8">
+          <div className="font-medium text-white mb-2 text-xs uppercase tracking-wider">Progress</div>
+          <div className="space-y-1.5 text-slate-300">
+            <div className="flex justify-between">
+              <span className="text-slate-500">Checklist</span>
+              <span className="text-right">{checklist.filter((c) => c.completed).length}/{checklist.length} completed</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Open tasks</span>
+              <span className="text-right">{tasks.filter((t) => t.status !== "done").length}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-slate-500">Scheduled content</span>
+              <span className="text-right">{contentItems.filter((c) => c.status === "scheduled").length}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

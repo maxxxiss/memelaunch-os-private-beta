@@ -28,7 +28,7 @@ export function CreateLaunchProjectForm({ workspaceId, workspaceSlug }: CreateLa
     <div className="bg-[#111827] p-8 rounded-2xl border border-white/10">
       <h2 className="text-2xl font-bold text-white mb-2">Create Launch Project</h2>
       <p className="text-slate-300 mb-6">
-        Set up your memecoin launch project with a checklist.
+        Set up your launch project with a pre-built checklist. After creating, you'll add tasks, schedule content, and track readiness.
       </p>
       <form action={handleSubmit} className="space-y-4">
         {error && (
@@ -66,8 +66,9 @@ export function CreateLaunchProjectForm({ workspaceId, workspaceSlug }: CreateLa
             required
             maxLength={100}
             className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-            placeholder="Enter project name"
+            placeholder="e.g. PEPE Launch"
           />
+          <p className="text-xs text-slate-500 mt-1">The internal name for your launch project.</p>
         </div>
         <div>
           <label htmlFor="ticker" className="block text-sm font-medium text-slate-300 mb-1">
@@ -80,8 +81,9 @@ export function CreateLaunchProjectForm({ workspaceId, workspaceSlug }: CreateLa
             required
             maxLength={20}
             className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-            placeholder="TICKER"
+            placeholder="e.g. PEPE"
           />
+          <p className="text-xs text-slate-500 mt-1">Token symbol (without $).</p>
         </div>
         <div>
           <label htmlFor="chain" className="block text-sm font-medium text-slate-300 mb-1">
@@ -107,6 +109,7 @@ export function CreateLaunchProjectForm({ workspaceId, workspaceSlug }: CreateLa
             type="date"
             className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
           />
+          <p className="text-xs text-slate-500 mt-1">Optional. Setting this improves your readiness score.</p>
         </div>
         <div>
           <label htmlFor="status" className="block text-sm font-medium text-slate-300 mb-1">
@@ -134,7 +137,7 @@ export function CreateLaunchProjectForm({ workspaceId, workspaceSlug }: CreateLa
             maxLength={500}
             rows={3}
             className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-none"
-            placeholder="Describe your project"
+            placeholder="Brief project description for your team"
           />
         </div>
         <button

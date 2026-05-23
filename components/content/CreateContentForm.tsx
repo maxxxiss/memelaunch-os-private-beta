@@ -25,7 +25,8 @@ export function CreateContentForm({ workspaceId, workspaceSlug, projectId }: Cre
 
   return (
     <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
-      <h3 className="text-lg font-semibold text-white mb-4">Schedule Content</h3>
+      <h3 className="text-lg font-semibold text-white mb-2">Schedule Content</h3>
+      <p className="text-xs text-slate-400 mb-6">Plan posts for X, Telegram, Discord, or your website before launch.</p>
       <form action={handleSubmit} className="space-y-4">
         {error && (
           <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
@@ -36,7 +37,7 @@ export function CreateContentForm({ workspaceId, workspaceSlug, projectId }: Cre
         <input type="hidden" name="workspaceSlug" value={workspaceSlug} />
         {projectId && <input type="hidden" name="projectId" value={projectId} />}
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-slate-300 mb-1">Title</label>
+          <label htmlFor="title" className="block text-sm font-medium text-slate-300 mb-1">Content title</label>
           <input
             id="title"
             name="title"
@@ -44,7 +45,7 @@ export function CreateContentForm({ workspaceId, workspaceSlug, projectId }: Cre
             required
             maxLength={200}
             className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
-            placeholder="Enter content title"
+            placeholder="e.g. Launch announcement thread"
           />
         </div>
         <div>
@@ -59,6 +60,7 @@ export function CreateContentForm({ workspaceId, workspaceSlug, projectId }: Cre
             <option value="discord">Discord</option>
             <option value="website">Website</option>
           </select>
+          <p className="text-xs text-slate-500 mt-1">Where this content will be published.</p>
         </div>
         <div>
           <label htmlFor="scheduledAt" className="block text-sm font-medium text-slate-300 mb-1">Scheduled date</label>
@@ -68,6 +70,7 @@ export function CreateContentForm({ workspaceId, workspaceSlug, projectId }: Cre
             type="datetime-local"
             className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
           />
+          <p className="text-xs text-slate-500 mt-1">Optional. Set when this content should go live.</p>
         </div>
         <div>
           <label htmlFor="status" className="block text-sm font-medium text-slate-300 mb-1">Status</label>
@@ -80,6 +83,7 @@ export function CreateContentForm({ workspaceId, workspaceSlug, projectId }: Cre
             <option value="scheduled">Scheduled</option>
             <option value="published">Published</option>
           </select>
+          <p className="text-xs text-slate-500 mt-1">Mark as published after posting.</p>
         </div>
         <div>
           <label htmlFor="notes" className="block text-sm font-medium text-slate-300 mb-1">Notes</label>
@@ -89,7 +93,7 @@ export function CreateContentForm({ workspaceId, workspaceSlug, projectId }: Cre
             maxLength={1000}
             rows={2}
             className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors resize-none"
-            placeholder="Add content notes"
+            placeholder="Draft copy, hashtags, or instructions"
           />
         </div>
         <button

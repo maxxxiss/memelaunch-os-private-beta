@@ -21,9 +21,9 @@ export function WorkspaceOnboarding() {
 
   return (
     <div className="bg-[#111827] p-8 rounded-2xl border border-white/10">
-      <h2 className="text-xl font-bold text-white mb-2">Create your workspace</h2>
+      <h2 className="text-xl font-bold text-white mb-2">Create your launch command center</h2>
       <p className="text-slate-400 text-sm mb-6">
-        A workspace is your launch command center. Give it a name — you can create more later.
+        Your workspace is where you manage launch projects, readiness, tasks, and content. Name it for your team or project.
       </p>
       <form action={handleSubmit} className="space-y-5">
         {error && (
@@ -44,6 +44,7 @@ export function WorkspaceOnboarding() {
             className="w-full px-3 py-2.5 bg-[#0b1020] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-600"
             placeholder="e.g. PEPE Launch Team"
           />
+          <p className="mt-1.5 text-xs text-slate-500">This is visible to your team. You can create multiple workspaces later.</p>
         </div>
         <div>
           <label htmlFor="slug" className="block text-sm text-slate-300 mb-1.5 font-medium">
@@ -59,7 +60,7 @@ export function WorkspaceOnboarding() {
             className="w-full px-3 py-2.5 bg-[#0b1020] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder:text-slate-600"
             placeholder="e.g. pepe-launch"
           />
-          <p className="mt-1.5 text-xs text-slate-500">Lowercase letters, numbers, and hyphens only.</p>
+          <p className="mt-1.5 text-xs text-slate-500">Lowercase letters, numbers, and hyphens only. Used in your workspace URL.</p>
         </div>
         <button
           type="submit"
@@ -68,6 +69,9 @@ export function WorkspaceOnboarding() {
         >
           {loading ? "Creating workspace..." : "Create workspace"}
         </button>
+        <p className="text-xs text-slate-500 text-center">
+          After creating, you'll set up your first launch project.
+        </p>
       </form>
     </div>
   );

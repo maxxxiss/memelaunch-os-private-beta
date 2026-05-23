@@ -20,7 +20,7 @@ export default function ContactPage() {
 
         <div className="space-y-4">
           <div className="bg-[#0b1020] border border-white/8 rounded-2xl p-6">
-            <h2 className="font-semibold text-white mb-2">General support</h2>
+            <h2 className="font-semibold text-white mb-2 text-sm uppercase tracking-wider">General support</h2>
             <p className="text-sm text-slate-400 mb-3">
               For account issues, billing questions, and general product support.
             </p>
@@ -33,7 +33,7 @@ export default function ContactPage() {
           </div>
 
           <div className="bg-[#0b1020] border border-white/8 rounded-2xl p-6">
-            <h2 className="font-semibold text-white mb-2">Billing and subscriptions</h2>
+            <h2 className="font-semibold text-white mb-2 text-sm uppercase tracking-wider">Billing and subscriptions</h2>
             <p className="text-sm text-slate-400 mb-3">
               For payment issues, refund requests, or subscription changes.
             </p>
@@ -46,7 +46,7 @@ export default function ContactPage() {
           </div>
 
           <div className="bg-[#0b1020] border border-white/8 rounded-2xl p-6">
-            <h2 className="font-semibold text-white mb-2">Response time</h2>
+            <h2 className="font-semibold text-white mb-2 text-sm uppercase tracking-wider">Response time</h2>
             <p className="text-sm text-slate-400">
               We aim to respond within 1–2 business days.
             </p>
