@@ -24,8 +24,8 @@ export function FeatureCards() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {FEATURES.map((f) => (
-            <div key={f.title} className="group bg-[#0d1117] border border-white/6 hover:border-white/12 p-6 rounded-2xl transition-colors">
-              <div className={`inline-flex p-2.5 rounded-xl border mb-5 ${f.bg}`}>
+            <div key={f.title} className="group bg-[#0d1117] border border-white/6 hover:border-white/12 p-6 rounded-2xl transition-all hover:-translate-y-1 hover:shadow-lg hover:shadow-black/30">
+              <div className={`inline-flex p-2.5 rounded-xl border mb-5 transition-transform group-hover:scale-110 ${f.bg}`}>
                 <f.icon className={`w-4 h-4 ${f.accent}`} />
               </div>
               <h3 className="font-semibold text-white mb-2 text-sm">{f.title}</h3>

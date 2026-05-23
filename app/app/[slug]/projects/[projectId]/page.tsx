@@ -16,7 +16,20 @@ import { ReadinessBreakdown } from "@/components/launch/ReadinessBreakdown";
 import { LaunchTimeline } from "@/components/launch/LaunchTimeline";
 import { LaunchPlanSummary } from "@/components/launch/LaunchPlanSummary";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { DashboardMobileNav } from "@/components/dashboard/DashboardMobileNav";
 import Link from "next/link";
+
+const STATUS_LABEL: Record<string, string> = {
+  pre_launch: "Pre-launch", live: "Live", paused: "Paused", cancelled: "Cancelled",
+};
+const STATUS_STYLE: Record<string, string> = {
+  pre_launch: "bg-amber-500/10 border-amber-500/20 text-amber-400",
+  live: "bg-emerald-500/10 border-emerald-500/20 text-emerald-400",
+  paused: "bg-yellow-500/10 border-yellow-500/20 text-yellow-400",
+  cancelled: "bg-red-500/10 border-red-500/20 text-red-400",
+};
+const barColor = (s: number) => s >= 75 ? "bg-emerald-500" : s >= 40 ? "bg-blue-500" : s >= 20 ? "bg-amber-500" : "bg-red-400/70";
+const scoreColor = (s: number) => s >= 75 ? "text-emerald-400" : s >= 40 ? "text-blue-400" : s >= 20 ? "text-amber-400" : "text-red-400";
 
 export default async function ProjectDetailPage({
   params,
@@ -104,31 +117,51 @@ export default async function ProjectDetailPage({
             <Link href={`/app/${slug}`} className="text-xs text-slate-500 hover:text-slate-300 transition-colors">← Dashboard</Link>
             <span className="text-slate-700">/</span>
             <h1 className="text-sm font-semibold text-white">{project.name}</h1>
-            <span className="px-2 py-0.5 bg-[#0d1117] border border-white/8 rounded text-xs text-slate-400 capitalize">{project.status.replace("_", " ")}</span>
+            <span className={`px-2 py-0.5 border rounded text-[10px] font-medium ${STATUS_STYLE[project.status] ?? "bg-white/5 border-white/8 text-slate-500"}`}>
+              {STATUS_LABEL[project.status] ?? project.status.replace("_", " ")}
+            </span>
           </div>
-          <div className="flex items-center gap-3 text-xs text-slate-500">
-            <span className="font-mono text-blue-400">${project.ticker}</span>
-            <span>{project.chain}</span>
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-mono text-blue-400 hidden sm:block">${project.ticker}</span>
+            <DashboardMobileNav workspaceSlug={slug} projectId={projectId} projectName={project.name} />
           </div>
         </header>
 
         <div className="px-8 py-8 max-w-5xl">
-          {/* Hero stats */}
+          {/* Project identity hero */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-6 md:col-span-2">
-              <p className="text-xs text-slate-500 uppercase tracking-widest font-medium mb-3">Launch Readiness</p>
-              <div className="text-5xl font-bold text-white mb-3">{readiness.totalScore}<span className="text-2xl text-slate-500">%</span></div>
-              <div className="w-full bg-white/5 rounded-full h-2 mb-2">
-                <div className="bg-blue-500 h-2 rounded-full transition-all" style={{ width: `${readiness.totalScore}%` }} />
+              <div className="flex items-start justify-between mb-5">
+                <div>
+                  <h2 className="text-xl font-bold text-white mb-1">{project.name}</h2>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-mono text-blue-400">${project.ticker}</span>
+                    <span className="text-slate-700">·</span>
+                    <span className="text-xs text-slate-500">{project.chain}</span>
+                  </div>
+                </div>
               </div>
-              <p className="text-xs text-slate-600">Based on checklist, tasks, links, and content</p>
+              <div className="flex gap-6">
+                <div>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Readiness</p>
+                  <p className={`text-2xl font-bold ${scoreColor(readiness.totalScore)}`}>{readiness.totalScore}%</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Launch Date</p>
+                  <p className="text-sm font-semibold text-white">{project.launch_date ? new Date(project.launch_date).toLocaleDateString() : <span className="text-slate-600">Not set</span>}</p>
+                </div>
+                <div>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Tasks Done</p>
+                  <p className="text-sm font-semibold text-white">{tasksCompleted}/{tasksTotal}</p>
+                </div>
+              </div>
             </div>
             <div className="space-y-3">
               <div className="bg-[#0d1117] border border-white/8 rounded-xl p-4">
                 <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Checklist</p>
                 <p className="text-xl font-bold text-white">{completed}<span className="text-sm text-slate-500">/{total}</span></p>
                 <div className="w-full bg-white/5 rounded-full h-1 mt-2">
-                  <div className="bg-white/40 h-1 rounded-full" style={{ width: `${readinessPct}%` }} />
+                  <div className={`${barColor(readinessPct)} h-1 rounded-full`} style={{ width: `${readinessPct}%` }} />
                 </div>
               </div>
               <div className="bg-[#0d1117] border border-white/8 rounded-xl p-4">
@@ -155,7 +188,7 @@ export default async function ProjectDetailPage({
               <span className="text-sm font-bold text-white">{readinessPct}%</span>
             </div>
             <div className="w-full bg-white/5 rounded-full h-1.5 mb-6">
-              <div className="bg-blue-500 h-1.5 rounded-full transition-all" style={{ width: `${readinessPct}%` }} />
+              <div className={`${barColor(readinessPct)} h-1.5 rounded-full transition-all`} style={{ width: `${readinessPct}%` }} />
             </div>
             <ProjectChecklist projectId={projectId} items={checklist} />
           </div>

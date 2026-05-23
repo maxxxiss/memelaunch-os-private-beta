@@ -1,35 +1,60 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
+
+const NAV_LINKS = [
+  { href: "/features", label: "Features" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/about", label: "About" },
+];
 
 export function PublicNav() {
+  const [open, setOpen] = useState(false);
   return (
-    <nav className="border-b border-white/8 bg-[#05070d]/90 backdrop-blur-sm sticky top-0 z-50">
+    <nav className="border-b border-white/8 bg-[#05070d]/90 backdrop-blur-sm sticky top-0 z-50 relative">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="text-lg font-bold text-white tracking-tight">
+        <Link href="/" className="text-sm font-bold text-white tracking-tight" onClick={() => setOpen(false)}>
           MemeLaunch OS
         </Link>
         <div className="hidden md:flex items-center gap-6">
-          <Link href="/features" className="text-sm text-slate-400 hover:text-white transition-colors">
-            Features
-          </Link>
-          <Link href="/pricing" className="text-sm text-slate-400 hover:text-white transition-colors">
-            Pricing
-          </Link>
-          <Link href="/about" className="text-sm text-slate-400 hover:text-white transition-colors">
-            About
-          </Link>
+          {NAV_LINKS.map((l) => (
+            <Link key={l.href} href={l.href} className="text-sm text-slate-400 hover:text-white transition-colors">{l.label}</Link>
+          ))}
         </div>
-        <div className="flex items-center gap-3">
-          <Link href="/login" className="text-sm text-slate-400 hover:text-white transition-colors">
-            Sign in
-          </Link>
-          <Link
-            href="/register"
-            className="px-4 py-2 bg-white text-[#05070d] rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors"
-          >
+        <div className="hidden md:flex items-center gap-3">
+          <Link href="/login" className="text-sm text-slate-400 hover:text-white transition-colors">Sign in</Link>
+          <Link href="/register" className="px-4 py-2 bg-white text-[#05070d] rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors">
             Get started free
           </Link>
         </div>
+        <button className="md:hidden p-2 text-slate-400 hover:text-white transition-colors" onClick={() => setOpen(!open)} aria-label={open ? "Close menu" : "Open menu"}>
+          {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
       </div>
+      {open && (
+        <div className="absolute top-full left-0 right-0 bg-[#05070d] border-b border-white/8 px-6 pb-5 md:hidden z-50">
+          <div className="flex flex-col pt-2">
+            {NAV_LINKS.map((l) => (
+              <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
+                className="text-sm text-slate-300 hover:text-white py-3 border-b border-white/5 last:border-0 transition-colors">
+                {l.label}
+              </Link>
+            ))}
+            <div className="flex gap-3 pt-4">
+              <Link href="/login" onClick={() => setOpen(false)}
+                className="flex-1 py-2.5 text-center text-sm text-slate-300 border border-white/10 rounded-lg hover:bg-white/5 transition-colors">
+                Sign in
+              </Link>
+              <Link href="/register" onClick={() => setOpen(false)}
+                className="flex-1 py-2.5 text-center bg-white text-[#05070d] rounded-lg text-sm font-semibold hover:bg-slate-100 transition-colors">
+                Get started
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

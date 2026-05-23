@@ -21,6 +21,9 @@
     background-size: 52px 52px;
   }
   .glow-blue {
-    box-shadow: 0 0 48px -12px rgba(59, 130, 246, 0.45);
+    box-shadow: 0 4px 20px -4px rgba(59, 130, 246, 0.4), 0 0 0 1px rgba(59, 130, 246, 0.08);
+  }
+  .cta-glow {
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(59, 130, 246, 0.14) 0%, transparent 65%);
   }
 }

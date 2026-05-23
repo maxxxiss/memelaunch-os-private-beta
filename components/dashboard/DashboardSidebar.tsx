@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FolderOpen, CheckSquare, ListTodo, Calendar, BarChart2, ChevronRight } from "lucide-react";
+import { LayoutDashboard, CheckSquare, ListTodo, Calendar, BarChart2, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 
@@ -44,7 +44,6 @@ export function DashboardSidebar({ workspaceSlug, projectId, projectName }: Dash
 
       <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto pt-3">
         <NavItem icon={LayoutDashboard} label="Dashboard" href={base} active={isDashboard} />
-        <NavItem icon={FolderOpen} label="Projects" href={base} active={false} />
 
         {isProject && (
           <>

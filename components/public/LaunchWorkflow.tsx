@@ -43,15 +43,17 @@ export function LaunchWorkflow() {
           {/* Connecting glow line */}
           <div className="absolute top-[27px] left-[12%] right-[12%] h-px bg-gradient-to-r from-blue-500/0 via-blue-500/25 to-emerald-500/0 hidden md:block" />
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-5 md:gap-4">
             {STEPS.map((step) => (
-              <div key={step.num} className="flex flex-col items-center text-center">
-                <div className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center mb-4 relative z-10 shadow-lg ${step.style}`}>
+              <div key={step.num} className="flex sm:flex-col items-center sm:items-center gap-4 sm:gap-0 sm:text-center">
+                <div className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl border-2 flex items-center justify-center shrink-0 sm:mb-4 relative z-10 shadow-lg ${step.style}`}>
                   <step.icon className="w-5 h-5" />
                 </div>
-                <p className="text-[9px] text-slate-600 font-mono mb-1.5 tracking-widest">{step.num}</p>
-                <p className="font-semibold text-white text-sm mb-1.5">{step.label}</p>
-                <p className="text-[11px] text-slate-500 leading-relaxed max-w-[120px]">{step.desc}</p>
+                <div className="sm:text-center">
+                  <p className="text-[9px] text-slate-600 font-mono sm:mb-1.5 tracking-widest hidden sm:block">{step.num}</p>
+                  <p className="font-semibold text-white text-sm mb-0.5 sm:mb-1.5">{step.label}</p>
+                  <p className="text-[11px] text-slate-500 leading-relaxed sm:max-w-[120px]">{step.desc}</p>
+                </div>
               </div>
             ))}
           </div>

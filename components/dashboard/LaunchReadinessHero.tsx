@@ -1,17 +1,21 @@
+import Link from "next/link";
+import { Rocket } from "lucide-react";
+
 interface LaunchReadinessHeroProps {
   score: number;
   activeProject: { name: string; ticker: string } | null;
   checklistProgress: { completed: number; total: number };
   openTasksCount: number;
   scheduledContentCount: number;
+  slug: string;
 }
 
 function KpiTile({ label, value, sub }: { label: string; value: string; sub: string }) {
   return (
     <div className="bg-white/4 border border-white/6 rounded-xl p-3.5">
-      <p className="text-[9px] text-slate-500 uppercase tracking-widest font-medium mb-1.5">{label}</p>
-      <p className="text-sm font-bold text-white truncate">{value}</p>
-      <p className="text-[10px] text-slate-600 truncate mt-0.5">{sub}</p>
+      <p className="text-xs text-slate-400 uppercase tracking-widest font-medium mb-1.5" style={{ fontSize: "10px" }}>{label}</p>
+      <p className="text-sm font-bold text-white truncate" title={value}>{value}</p>
+      <p className="text-xs text-slate-400 truncate mt-0.5">{sub}</p>
     </div>
   );
 }
@@ -31,11 +35,31 @@ export function LaunchReadinessHero({
   checklistProgress,
   openTasksCount,
   scheduledContentCount,
+  slug,
 }: LaunchReadinessHeroProps) {
   const checklistPct =
     checklistProgress.total > 0
       ? Math.round((checklistProgress.completed / checklistProgress.total) * 100)
       : 0;
+
+  if (!activeProject) {
+    return (
+      <div className="relative overflow-hidden bg-[#080d18] border border-blue-500/12 rounded-2xl p-8 mb-5 text-center">
+        <div className="absolute top-0 right-0 w-72 h-72 bg-blue-600/7 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+        <div className="relative">
+          <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
+            <Rocket className="w-5 h-5 text-blue-400" />
+          </div>
+          <h2 className="text-lg font-bold text-white mb-2">Start your first launch</h2>
+          <p className="text-sm text-slate-400 mb-6 max-w-sm mx-auto">Create a project to track readiness, assign tasks, and plan your launch content.</p>
+          <Link href={`/app/${slug}/new-project`} className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-colors glow-blue">
+            <Rocket className="w-4 h-4" />
+            Create your first project
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative overflow-hidden bg-[#080d18] border border-blue-500/12 rounded-2xl p-7 mb-5">
