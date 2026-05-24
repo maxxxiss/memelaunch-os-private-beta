@@ -3,6 +3,7 @@
 import { signUp } from "@/lib/actions/auth";
 import { useState } from "react";
 import Link from "next/link";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
 
 export default function RegisterPage() {
   const [error, setError] = useState<string | null>(null);
@@ -30,9 +31,11 @@ export default function RegisterPage() {
         </div>
         <form action={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
-              {error}
-            </div>
+            <ErrorMessage
+              title="Account creation failed"
+              message={error}
+              onRetry={() => setError(null)}
+            />
           )}
           <div>
             <label htmlFor="displayName" className="block text-sm text-slate-300 mb-1">

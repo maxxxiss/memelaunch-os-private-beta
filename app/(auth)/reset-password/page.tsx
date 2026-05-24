@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/browser";
+import Link from "next/link";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState("");
@@ -17,7 +19,7 @@ export default function ResetPasswordPage() {
     try {
       const supabase = createClient();
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/update-password`,
+        redirectTo: `${window.location.origin}/reset-password`,
       });
 
       if (error) {
@@ -35,7 +37,7 @@ export default function ResetPasswordPage() {
   if (sent) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-[#05070d] px-4">
-        <a href="/" className="text-lg font-bold text-white mb-8 tracking-tight">MemeLaunch OS</a>
+        <Link href="/" className="text-lg font-bold text-white mb-8 tracking-tight">MemeLaunch OS</Link>
         <div className="w-full max-w-md p-8 bg-[#111827] rounded-2xl border border-white/10 text-center">
           <div className="w-10 h-10 bg-emerald-500/15 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
@@ -44,9 +46,9 @@ export default function ResetPasswordPage() {
           <p className="text-sm text-slate-400 mb-6">
             We sent a reset link to <span className="text-white">{email}</span>. Click the link to set a new password.
           </p>
-          <a href="/login" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
+          <Link href="/login" className="text-sm text-blue-400 hover:text-blue-300 transition-colors">
             Back to sign in
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -54,7 +56,7 @@ export default function ResetPasswordPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#05070d] px-4">
-      <a href="/" className="text-lg font-bold text-white mb-8 tracking-tight">MemeLaunch OS</a>
+      <Link href="/" className="text-lg font-bold text-white mb-8 tracking-tight">MemeLaunch OS</Link>
       <div className="w-full max-w-md p-8 bg-[#111827] rounded-2xl border border-white/10">
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-white mb-2">Reset your password</h1>
@@ -62,9 +64,11 @@ export default function ResetPasswordPage() {
         </div>
         <form onSubmit={handleSubmit} className="space-y-5">
           {error && (
-            <div className="p-3 bg-red-900/20 border border-red-500/30 rounded-lg text-red-400 text-sm">
-              {error}
-            </div>
+            <ErrorMessage
+              title="Failed to send reset link"
+              message={error}
+              onRetry={() => setError(null)}
+            />
           )}
           <div>
             <label htmlFor="email" className="block text-sm text-slate-300 mb-1.5 font-medium">Email</label>
@@ -88,7 +92,7 @@ export default function ResetPasswordPage() {
           </button>
         </form>
         <p className="mt-6 text-sm text-slate-500 text-center">
-          <a href="/login" className="text-blue-400 hover:text-blue-300 transition-colors">Back to sign in</a>
+          <Link href="/login" className="text-blue-400 hover:text-blue-300 transition-colors">Back to sign in</Link>
         </p>
       </div>
     </div>

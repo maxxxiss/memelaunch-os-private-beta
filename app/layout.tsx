@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/providers/ThemeProvider";
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://memelaunch-os-private-beta.vercel.app"),
   title: {
     default: "MemeLaunch OS — Launch Operating System for Memecoin Teams",
     template: "%s — MemeLaunch OS",
