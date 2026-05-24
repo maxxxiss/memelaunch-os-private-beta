@@ -4,6 +4,7 @@ import { addProjectLink, removeProjectLink } from "@/lib/actions/project-link";
 import { useState } from "react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
+import { GlowCard } from "@/components/ui/premium";
 import { Link as LinkIcon } from "lucide-react";
 
 interface ProjectLink {
@@ -52,7 +53,7 @@ export function ProjectLinks({ projectId, workspaceId, workspaceSlug, links }: P
   }
 
   return (
-    <div className="bg-[#111827] p-6 rounded-2xl border border-white/10">
+    <GlowCard className="p-6">
       <h3 className="text-lg font-semibold text-white mb-4">Project Links</h3>
       {error && (
         <ErrorMessage
@@ -71,17 +72,17 @@ export function ProjectLinks({ projectId, workspaceId, workspaceSlug, links }: P
           />
         ) : (
           links.map((link) => (
-            <div key={link.id} className="flex justify-between items-center p-3 bg-[#0b1020] rounded-lg border border-white/10">
-              <div>
+            <div key={link.id} className="flex justify-between items-center p-3 bg-[#0b1020] rounded-2xl border border-white/10">
+              <div className="flex-1 min-w-0">
                 <div className="text-sm font-medium text-white">{LINK_TYPE_LABELS[link.type] || link.type}</div>
                 {link.label && <div className="text-xs text-slate-300">{link.label}</div>}
-                <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-xs text-blue-400 hover:text-blue-300">
+                <a href={link.url} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-slate-500 hover:text-blue-400 truncate block">
                   {link.url}
                 </a>
               </div>
               <button
                 onClick={() => handleRemoveLink(link.id)}
-                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded text-xs font-medium transition-colors"
+                className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-medium transition-colors ml-3 shrink-0"
               >
                 Remove
               </button>
@@ -98,7 +99,7 @@ export function ProjectLinks({ projectId, workspaceId, workspaceSlug, links }: P
           <select
             id="type"
             name="type"
-            className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
           >
             <option value="website">Website</option>
             <option value="x">X (Twitter)</option>
@@ -115,7 +116,7 @@ export function ProjectLinks({ projectId, workspaceId, workspaceSlug, links }: P
             name="url"
             type="url"
             required
-            className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
             placeholder="https://"
           />
         </div>
@@ -126,18 +127,18 @@ export function ProjectLinks({ projectId, workspaceId, workspaceSlug, links }: P
             name="label"
             type="text"
             maxLength={100}
-            className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+            className="w-full px-3 py-2 bg-[#0b1020] border border-white/10 rounded-xl text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
             placeholder="Optional label"
           />
         </div>
         <button
           type="submit"
           disabled={loading}
-          className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-cta"
         >
           {loading ? "Adding..." : "Add link"}
         </button>
       </form>
-    </div>
+    </GlowCard>
   );
 }

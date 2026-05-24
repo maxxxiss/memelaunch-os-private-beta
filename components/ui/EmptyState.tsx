@@ -1,5 +1,6 @@
 import { LucideIcon } from "lucide-react";
 import Link from "next/link";
+import { GlowCard, PremiumCTA } from "./premium";
 
 interface EmptyStateProps {
   icon?: LucideIcon;
@@ -20,20 +21,20 @@ interface EmptyStateProps {
 
 const variantStyles = {
   default: {
-    container: "bg-[#0b1020] border border-white/8",
+    tone: undefined as "blue" | "cyan" | "emerald" | "violet" | undefined,
     icon: "text-slate-400",
     title: "text-white",
     description: "text-slate-400",
   },
   premium: {
-    container: "bg-[#080d18] border border-blue-500/12",
+    tone: "blue" as const,
     icon: "text-blue-400",
     title: "text-white",
     description: "text-slate-400",
   },
   warning: {
-    container: "bg-yellow-500/5 border border-yellow-500/20",
-    icon: "text-yellow-400",
+    tone: undefined,
+    icon: "text-amber-400",
     title: "text-white",
     description: "text-slate-400",
   },
@@ -50,9 +51,9 @@ export function EmptyState({
   const styles = variantStyles[variant];
 
   return (
-    <div className={`${styles.container} rounded-2xl p-8 text-center`}>
+    <GlowCard tone={styles.tone} className="p-8 text-center">
       {Icon && (
-        <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center mx-auto mb-4">
+        <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/8 flex items-center justify-center mx-auto mb-4">
           <Icon className={`w-5 h-5 ${styles.icon}`} />
         </div>
       )}
@@ -63,16 +64,11 @@ export function EmptyState({
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         {primaryAction && (
           primaryAction.href ? (
-            <Link
-              href={primaryAction.href}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-colors"
-            >
-              {primaryAction.label}
-            </Link>
+            <PremiumCTA href={primaryAction.href}>{primaryAction.label}</PremiumCTA>
           ) : (
             <button
               onClick={primaryAction.onClick}
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium text-sm transition-colors"
+              className="px-5 py-2.5 bg-white hover:bg-blue-50 text-[#05070d] rounded-xl font-bold text-sm transition-colors shadow-cta"
             >
               {primaryAction.label}
             </button>
@@ -82,20 +78,20 @@ export function EmptyState({
           secondaryAction.href ? (
             <Link
               href={secondaryAction.href}
-              className="px-5 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-lg font-medium text-sm transition-colors"
+              className="px-5 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-xl font-medium text-sm transition-colors"
             >
               {secondaryAction.label}
             </Link>
           ) : (
             <button
               onClick={secondaryAction.onClick}
-              className="px-5 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-lg font-medium text-sm transition-colors"
+              className="px-5 py-2.5 bg-white/5 border border-white/10 hover:bg-white/10 text-white rounded-xl font-medium text-sm transition-colors"
             >
               {secondaryAction.label}
             </button>
           )
         )}
       </div>
-    </div>
+    </GlowCard>
   );
 }

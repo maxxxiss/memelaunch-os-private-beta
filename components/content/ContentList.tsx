@@ -5,6 +5,8 @@ import { useState } from "react";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ErrorMessage } from "@/components/ui/ErrorMessage";
 import { Calendar } from "lucide-react";
+import { StatusChip } from "@/components/ui/premium";
+import { PlatformBadge } from "@/components/ui/PlatformBadge";
 
 interface ContentItem {
   id: string;
@@ -32,10 +34,10 @@ const STATUS_LABELS: Record<string, string> = {
   published: "Published",
 };
 
-const STATUS_BADGES: Record<string, { label: string; bg: string; text: string }> = {
-  draft: { label: "Draft", bg: "bg-[#111827]", text: "text-slate-300" },
-  scheduled: { label: "Scheduled", bg: "bg-yellow-900/20", text: "text-yellow-400" },
-  published: { label: "Published", bg: "bg-green-900/20", text: "text-green-400" },
+const STATUS_TONE: Record<string, "blue" | "cyan" | "emerald" | "violet"> = {
+  draft: "blue",
+  scheduled: "cyan",
+  published: "emerald",
 };
 
 export function ContentList({ items }: ContentListProps) {
@@ -75,23 +77,23 @@ export function ContentList({ items }: ContentListProps) {
         />
       )}
       {localItems.map((item) => (
-        <div key={item.id} className="p-4 bg-[#070b14] rounded-xl border border-white/6 hover:border-white/10 transition-colors">
+        <div key={item.id} className="p-4 bg-[#070b14] rounded-2xl border border-white/6 hover:border-white/10 transition-colors">
           <div className="flex items-start justify-between gap-3 mb-2">
             <div className="flex-1 min-w-0">
               <div className="text-sm font-medium text-white mb-0.5 truncate">{item.title}</div>
-              <div className="text-[10px] text-slate-500 font-medium uppercase tracking-wide">
-                {PLATFORM_LABELS[item.platform] ?? item.platform}
+              <div className="flex items-center gap-2 mt-1">
+                <PlatformBadge platform={item.platform as any} size="sm" />
+                {item.scheduled_at && (
+                  <span className="font-mono text-[10px] text-slate-500">
+                    {new Date(item.scheduled_at).toLocaleDateString()}
+                  </span>
+                )}
               </div>
             </div>
-            <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-medium border ${STATUS_BADGES[item.status].bg} ${STATUS_BADGES[item.status].text} border-white/8`}>
-              {STATUS_BADGES[item.status].label}
-            </span>
+            <StatusChip tone={STATUS_TONE[item.status] || "blue"}>{STATUS_LABELS[item.status]}</StatusChip>
           </div>
-          {(item.scheduled_at || item.notes) && (
-            <div className="flex items-center gap-3 text-[10px] text-slate-600 mb-2">
-              {item.scheduled_at && <span>{new Date(item.scheduled_at).toLocaleString()}</span>}
-              {item.notes && <span className="truncate">{item.notes}</span>}
-            </div>
+          {item.notes && (
+            <div className="text-xs text-slate-500 mt-2 leading-relaxed">{item.notes}</div>
           )}
           <select
             value={item.status}

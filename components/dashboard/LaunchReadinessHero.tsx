@@ -1,5 +1,6 @@
 ﻿import { Rocket } from "lucide-react";
 import { GlowCard, PremiumCTA, ReadinessGauge } from "@/components/ui/premium";
+import { KpiTile } from "@/components/ui/KpiTile";
 
 interface LaunchReadinessHeroProps {
   score: number;
@@ -8,16 +9,6 @@ interface LaunchReadinessHeroProps {
   openTasksCount: number;
   scheduledContentCount: number;
   slug: string;
-}
-
-function KpiTile({ label, value, sub }: { label: string; value: string; sub: string }) {
-  return (
-    <div className="rounded-2xl border border-white/8 bg-white/[0.035] p-4">
-      <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">{label}</p>
-      <p className="truncate text-lg font-bold text-white" title={value}>{value}</p>
-      <p className="mt-1 truncate text-xs text-slate-500">{sub}</p>
-    </div>
-  );
 }
 
 const scoreLabel = (s: number) =>
@@ -51,10 +42,10 @@ export function LaunchReadinessHero({ score, activeProject, checklistProgress, o
           <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] text-white">{activeProject.name}</h2>
           <p className="mt-1 font-mono text-sm text-blue-300">${activeProject.ticker}</p>
           <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
-            <KpiTile label="Checklist" value={`${checklistProgress.completed}/${checklistProgress.total}`} sub={`${checklistPct}% complete`} />
-            <KpiTile label="Open Tasks" value={String(openTasksCount)} sub={openTasksCount === 0 ? "All clear" : "Need attention"} />
-            <KpiTile label="Scheduled" value={String(scheduledContentCount)} sub="Content items" />
-            <KpiTile label="Next Step" value={openTasksCount > 0 ? "Tasks" : "Content"} sub="Recommended focus" />
+            <KpiTile label="Checklist" value={`${checklistProgress.completed}/${checklistProgress.total}`} sub={`${checklistPct}% complete`} tone="emerald" />
+            <KpiTile label="Open Tasks" value={String(openTasksCount)} sub={openTasksCount === 0 ? "All clear" : "Need attention"} tone="cyan" />
+            <KpiTile label="Scheduled" value={String(scheduledContentCount)} sub="Content items" tone="violet" />
+            <KpiTile label="Next Step" value={openTasksCount > 0 ? "Tasks" : "Content"} sub="Recommended focus" tone="blue" />
           </div>
         </div>
       </div>

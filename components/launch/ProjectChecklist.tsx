@@ -81,7 +81,7 @@ export function ProjectChecklist({ projectId, items }: ProjectChecklistProps) {
               {sectionItems.map((item) => (
                 <label
                   key={item.id}
-                  className={`flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer transition-colors ${
+                  className={`flex items-start gap-3 p-3.5 rounded-2xl border cursor-pointer transition-all hover:bg-white/[0.03] ${
                     item.completed
                       ? "bg-emerald-500/5 border-emerald-500/15 hover:border-emerald-500/25"
                       : "bg-[#070b14] border-white/6 hover:border-white/12"
@@ -91,7 +91,7 @@ export function ProjectChecklist({ projectId, items }: ProjectChecklistProps) {
                     type="checkbox"
                     checked={item.completed}
                     onChange={(e) => handleToggle(item.id, e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded border-white/20 bg-transparent text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 shrink-0"
+                    className={`mt-0.5 w-4 h-4 rounded border-white/20 bg-transparent text-emerald-500 focus:ring-emerald-500 focus:ring-offset-0 shrink-0 ${item.completed ? "shadow-glow-emerald/30" : ""}`}
                   />
                   <div className="flex-1 min-w-0">
                     <div className={`text-sm font-medium ${item.completed ? "text-slate-500 line-through" : "text-white"}`}>

@@ -40,11 +40,11 @@ export function DashboardMobileNav({ workspaceSlug, projectId, projectName }: Da
       {open && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-black/60 md:hidden"
+            className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm md:hidden"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
-          <div className="fixed inset-y-0 left-0 z-50 w-64 bg-[#070b14] border-r border-white/8 flex flex-col md:hidden">
+          <div className="fixed inset-y-0 left-0 z-50 w-64 bg-[#040810]/98 backdrop-blur-2xl border-r border-white/10 flex flex-col md:hidden">
             <div className="p-4 border-b border-white/8 flex items-center justify-between">
               <Link href="/" className="text-sm font-bold text-white tracking-tight" onClick={() => setOpen(false)}>
                 MemeLaunch OS
@@ -62,7 +62,7 @@ export function DashboardMobileNav({ workspaceSlug, projectId, projectName }: Da
             <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto pt-3">
               {links.map((l) => (
                 <Link key={l.href} href={l.href} onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white hover:bg-white/5 transition-colors">
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-slate-400 hover:text-white hover:bg-white/[0.04] transition-colors">
                   <l.icon className="w-4 h-4 shrink-0" />
                   {l.label}
                 </Link>

@@ -11,11 +11,23 @@ interface LabelProps {
   tone?: "blue" | "cyan" | "emerald" | "violet";
 }
 
+interface GlowCardProps extends ShellProps {
+  tone?: "blue" | "cyan" | "emerald" | "violet";
+  elevated?: boolean;
+}
+
 const toneStyles = {
   blue: "border-blue-500/20 bg-blue-500/10 text-blue-300",
   cyan: "border-cyan-500/20 bg-cyan-500/10 text-cyan-300",
   emerald: "border-emerald-500/20 bg-emerald-500/10 text-emerald-300",
   violet: "border-violet-500/20 bg-violet-500/10 text-violet-300",
+};
+
+const toneGlow = {
+  blue: "shadow-glow-blue",
+  cyan: "shadow-glow-cyan",
+  emerald: "shadow-glow-emerald",
+  violet: "shadow-glow-violet",
 };
 
 export function VisualShell({ children, className = "" }: ShellProps) {
@@ -28,9 +40,10 @@ export function VisualShell({ children, className = "" }: ShellProps) {
   );
 }
 
-export function GlowCard({ children, className = "" }: ShellProps) {
+export function GlowCard({ children, className = "", tone, elevated = false }: GlowCardProps) {
+  const shadowClass = elevated ? "shadow-glow-blue" : tone ? toneGlow[tone] : "shadow-panel";
   return (
-    <div className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] shadow-2xl shadow-black/30 backdrop-blur ${className}`}>
+    <div className={`relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.035] backdrop-blur ${shadowClass} ${className}`}>
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
       <div className="relative">{children}</div>
     </div>
@@ -74,9 +87,13 @@ export function ReadinessGauge({ score }: { score: number }) {
   );
 }
 
-export function PremiumCTA({ href, children }: { href: string; children: ReactNode }) {
+export function PremiumCTA({ href, children, variant = "solid" }: { href: string; children: ReactNode; variant?: "solid" | "gradient" }) {
+  const baseClass = "inline-flex min-h-11 items-center justify-center rounded-xl px-6 py-3 text-sm font-bold text-[#05070d] transition hover:-translate-y-0.5";
+  const variantClass = variant === "gradient"
+    ? "bg-gradient-to-r from-blue-500 to-cyan-500 shadow-cta hover:shadow-glow-blue"
+    : "bg-white shadow-cta hover:shadow-glow-blue hover:bg-blue-50";
   return (
-    <Link href={href} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-bold text-[#05070d] shadow-lg shadow-blue-500/20 transition hover:bg-blue-50 hover:shadow-blue-400/30">
+    <Link href={href} className={`${baseClass} ${variantClass}`}>
       {children}
     </Link>
   );

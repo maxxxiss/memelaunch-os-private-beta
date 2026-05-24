@@ -80,24 +80,25 @@ export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: Pric
       {checkoutStatus === "cancelled" && <div className="mb-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">Checkout cancelled. You can try again anytime.</div>}
       {error && <div className="mb-6"><ErrorMessage title="Checkout failed" message={error} onRetry={() => setError(null)} /></div>}
       <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-3">
-        <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6">
+        <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-[#0a1628] to-[#060e1c] p-6 shadow-panel">
           <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Free</p>
           <div className="mt-4 text-5xl font-black text-white">$0<span className="text-base font-normal text-slate-500">/mo</span></div>
           <p className="mt-3 text-sm text-slate-400">Start your first launch command center.</p>
           <ul className="my-7 space-y-3">{freeFeatures.map((f, i) => <PlanFeature key={f} label={f} included={i < 4} />)}</ul>
           <Link href="/register" className="block rounded-xl border border-white/10 bg-white/5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10">Start free</Link>
         </div>
-        <div className="relative rounded-3xl border border-blue-400/40 bg-gradient-to-b from-blue-500/20 to-white/[0.035] p-6 shadow-2xl shadow-blue-500/15">
-          <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full border border-blue-300/30 bg-blue-500 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Best for launch teams</div>
+        <div className="relative rounded-3xl border border-blue-400/40 bg-gradient-to-b from-blue-500/20 to-[#0a1628] p-6 shadow-glow-blue">
+          <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-blue-400/60 to-transparent rounded-t-3xl" />
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full border border-blue-300/30 bg-blue-500 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-white shadow-glow-blue/50">Best for launch teams</div>
           <p className="text-[10px] font-bold uppercase tracking-widest text-blue-300">Pro</p>
           <div className="mt-4 text-5xl font-black text-white">$29<span className="text-base font-normal text-slate-400">/mo</span></div>
           <p className="mt-3 text-sm text-slate-300">Unlimited launch projects, exports, and templates.</p>
           <ul className="my-7 space-y-3">{proFeatures.map((f) => <PlanFeature key={f} label={f} />)}</ul>
-          <button onClick={() => handleCheckout(proPriceId, "pro")} disabled={loading === "pro" || !stripeConfigured} className="w-full rounded-xl bg-white py-3 text-sm font-bold text-[#05070d] shadow-lg shadow-blue-500/20 transition hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50">
+          <button onClick={() => handleCheckout(proPriceId, "pro")} disabled={loading === "pro" || !stripeConfigured} className="w-full rounded-xl bg-white py-3 text-sm font-bold text-[#05070d] shadow-cta transition hover:bg-blue-50 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-50">
             {loading === "pro" ? "Opening checkout..." : stripeConfigured ? "Get Pro" : "Checkout unavailable"}
           </button>
         </div>
-        <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6">
+        <div className="rounded-3xl border border-white/10 bg-gradient-to-b from-[#0a1628] to-[#060e1c] p-6 shadow-panel">
           <p className="text-[10px] font-bold uppercase tracking-widest text-violet-300">Team</p>
           <div className="mt-4 text-5xl font-black text-white">$99<span className="text-base font-normal text-slate-500">/mo</span></div>
           <p className="mt-3 text-sm text-slate-400">Built for multi-person launch operations.</p>
@@ -107,7 +108,7 @@ export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: Pric
           </button>
         </div>
       </div>
-      <div className="mt-10 flex flex-col items-center gap-2 rounded-3xl border border-emerald-500/15 bg-emerald-500/5 p-5 text-center sm:flex-row sm:justify-center">
+      <div className="mt-10 flex flex-col items-center gap-2 rounded-3xl border border-emerald-500/15 bg-emerald-500/5 p-5 text-center sm:flex-row sm:justify-center shadow-panel">
         <ShieldCheck className="h-4 w-4 text-emerald-300" />
         <p className="text-sm text-slate-400">Payments processed securely by Stripe. <Link href="/refund-policy" className="text-blue-300 hover:text-blue-200">Refund policy</Link></p>
       </div>
