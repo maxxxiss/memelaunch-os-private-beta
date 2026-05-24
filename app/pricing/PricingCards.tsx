@@ -1,15 +1,29 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { createCheckoutSession } from "@/lib/actions/stripe";
-import { useState, useEffect, useRef } from "react";
-import { useSearchParams, usePathname } from "next/navigation";
-import { Check, X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { Check, X, ShieldCheck } from "lucide-react";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
 
 interface PricingCardsProps {
   proPriceId: string;
   teamPriceId: string;
   stripeConfigured: boolean;
+}
+
+const freeFeatures = ["1 workspace", "1 launch project", "Launch checklist", "Tasks & content planner", "Launch plan export", "Launch templates"];
+const proFeatures = ["Unlimited workspaces", "Unlimited projects", "Launch checklist", "Tasks & content planner", "Launch plan export", "Launch templates"];
+const teamFeatures = ["Everything in Pro", "Team collaboration", "Role-based access", "Team activity logs", "Custom branding", "Priority support"];
+
+function PlanFeature({ label, included = true }: { label: string; included?: boolean }) {
+  return (
+    <li className="flex items-center gap-2 text-sm">
+      {included ? <Check className="h-4 w-4 shrink-0 text-emerald-400" /> : <X className="h-4 w-4 shrink-0 text-slate-600" />}
+      <span className={included ? "text-slate-300" : "text-slate-500"}>{label}</span>
+    </li>
+  );
 }
 
 export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: PricingCardsProps) {
@@ -22,10 +36,8 @@ export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: Pric
 
   const resetLoading = () => {
     setLoading(null);
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = null;
   };
 
   useEffect(() => {
@@ -34,50 +46,29 @@ export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: Pric
   }, [checkoutStatus, pathname]);
 
   useEffect(() => {
-    const handlePageShow = (event: PageTransitionEvent) => {
-      if (event.persisted) {
-        resetLoading();
-      }
-    };
-
-    const handleFocus = () => {
-      resetLoading();
-    };
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        resetLoading();
-      }
-    };
-
-    window.addEventListener("pageshow", handlePageShow);
-    window.addEventListener("focus", handleFocus);
+    const reset = () => resetLoading();
+    const handleVisibilityChange = () => document.visibilityState === "visible" && resetLoading();
+    window.addEventListener("pageshow", reset);
+    window.addEventListener("focus", reset);
     document.addEventListener("visibilitychange", handleVisibilityChange);
-
     return () => {
-      window.removeEventListener("pageshow", handlePageShow);
-      window.removeEventListener("focus", handleFocus);
+      window.removeEventListener("pageshow", reset);
+      window.removeEventListener("focus", reset);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, []);
 
   const handleCheckout = async (priceId: string, planName: string) => {
     setLoading(planName);
     setError(null);
-
     timeoutRef.current = setTimeout(() => {
       resetLoading();
       setError("Checkout took too long. Please try again.");
     }, 10000);
-
     try {
       const result = await createCheckoutSession(priceId);
-      if (result.url) {
-        window.location.href = result.url;
-      }
+      if (result.url) window.location.href = result.url;
     } catch (err) {
       resetLoading();
       setError(err instanceof Error ? err.message : "Failed to start checkout");
@@ -86,103 +77,39 @@ export function PricingCards({ proPriceId, teamPriceId, stripeConfigured }: Pric
 
   return (
     <>
-      {checkoutStatus === "cancelled" && (
-        <div className="mb-6 p-4 bg-slate-500/10 border border-slate-500/50 rounded-lg">
-          <p className="text-slate-300 text-sm">Checkout cancelled. You can try again anytime.</p>
+      {checkoutStatus === "cancelled" && <div className="mb-6 rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">Checkout cancelled. You can try again anytime.</div>}
+      {error && <div className="mb-6"><ErrorMessage title="Checkout failed" message={error} onRetry={() => setError(null)} /></div>}
+      <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-3">
+        <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Free</p>
+          <div className="mt-4 text-5xl font-black text-white">$0<span className="text-base font-normal text-slate-500">/mo</span></div>
+          <p className="mt-3 text-sm text-slate-400">Start your first launch command center.</p>
+          <ul className="my-7 space-y-3">{freeFeatures.map((f, i) => <PlanFeature key={f} label={f} included={i < 4} />)}</ul>
+          <Link href="/register" className="block rounded-xl border border-white/10 bg-white/5 py-3 text-center text-sm font-semibold text-white transition hover:bg-white/10">Start free</Link>
         </div>
-      )}
-
-      {error && (
-        <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-lg">
-          <p className="text-red-400 text-sm">{error}</p>
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-        <div className="bg-[#0d1117] p-6 rounded-2xl border border-white/8">
-          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold mb-3">Free</p>
-          <div className="text-4xl font-bold text-white mb-1">$0<span className="text-base text-slate-500 font-normal">/mo</span></div>
-          <p className="text-xs text-slate-500 mb-5">Forever free, 1 project</p>
-          <ul className="space-y-3 mb-6 text-slate-300 text-sm">
-            {[
-              { included: true, label: "1 workspace" },
-              { included: true, label: "1 launch project" },
-              { included: true, label: "Launch checklist" },
-              { included: true, label: "Tasks & content planner" },
-              { included: false, label: "Launch plan export" },
-              { included: false, label: "Launch templates" },
-            ].map((f) => (
-              <li key={f.label} className="flex items-center gap-2">
-                {f.included ? <Check className="w-4 h-4 text-emerald-400 shrink-0" /> : <X className="w-4 h-4 text-slate-600 shrink-0" />}
-                <span className={f.included ? "" : "text-slate-500"}>{f.label}</span>
-              </li>
-            ))}
-          </ul>
-          <Link
-            href="/register"
-            className="block w-full py-3 bg-white/5 border border-white/8 text-white rounded-xl text-center text-sm font-medium hover:border-white/15 transition-colors"
-          >
-            Get Started
-          </Link>
-        </div>
-
-        <div className="relative bg-gradient-to-b from-blue-500/8 to-[#0d1117] p-6 rounded-2xl border border-blue-500/30 shadow-xl shadow-blue-500/10">
-          <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 bg-blue-500 text-white text-[10px] font-bold rounded-full tracking-widest uppercase whitespace-nowrap">
-            Most Popular
-          </div>
-          <p className="text-[10px] text-blue-400 uppercase tracking-widest font-semibold mb-3">Pro</p>
-          <div className="text-4xl font-bold text-white mb-1">$29<span className="text-base text-slate-500 font-normal">/mo</span></div>
-          <p className="text-xs text-slate-400 mb-5">Unlimited projects &amp; workspaces</p>
-          <ul className="space-y-3 mb-6 text-sm">
-            {["Unlimited workspaces", "Unlimited projects", "Launch checklist", "Tasks & content planner", "Launch plan export", "Launch templates"].map((f) => (
-              <li key={f} className="flex items-center gap-2 text-slate-300">
-                <Check className="w-4 h-4 text-emerald-400 shrink-0" />{f}
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={() => handleCheckout(proPriceId, "pro")}
-            disabled={loading === "pro" || !stripeConfigured}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm shadow-lg shadow-blue-500/20"
-          >
-            {loading === "pro" ? "Loading..." : stripeConfigured ? "Get Pro" : "Coming Soon"}
+        <div className="relative rounded-3xl border border-blue-400/40 bg-gradient-to-b from-blue-500/20 to-white/[0.035] p-6 shadow-2xl shadow-blue-500/15">
+          <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full border border-blue-300/30 bg-blue-500 px-4 py-1 text-[10px] font-bold uppercase tracking-widest text-white">Best for launch teams</div>
+          <p className="text-[10px] font-bold uppercase tracking-widest text-blue-300">Pro</p>
+          <div className="mt-4 text-5xl font-black text-white">$29<span className="text-base font-normal text-slate-400">/mo</span></div>
+          <p className="mt-3 text-sm text-slate-300">Unlimited launch projects, exports, and templates.</p>
+          <ul className="my-7 space-y-3">{proFeatures.map((f) => <PlanFeature key={f} label={f} />)}</ul>
+          <button onClick={() => handleCheckout(proPriceId, "pro")} disabled={loading === "pro" || !stripeConfigured} className="w-full rounded-xl bg-white py-3 text-sm font-bold text-[#05070d] shadow-lg shadow-blue-500/20 transition hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50">
+            {loading === "pro" ? "Opening checkout..." : stripeConfigured ? "Get Pro" : "Checkout unavailable"}
           </button>
         </div>
-
-        <div className="bg-[#0d1117] p-6 rounded-2xl border border-white/8">
-          <p className="text-[10px] text-slate-500 uppercase tracking-widest font-semibold mb-3">Team</p>
-          <div className="text-4xl font-bold text-white mb-1">$99<span className="text-base text-slate-500 font-normal">/mo</span></div>
-          <p className="text-xs text-slate-500 mb-5">Team collaboration &amp; roles</p>
-          <ul className="space-y-3 mb-6 text-sm">
-            {[
-              { included: true, label: "Everything in Pro" },
-              { included: true, label: "Team collaboration" },
-              { included: true, label: "Role-based access" },
-              { included: true, label: "Team activity logs" },
-              { included: false, label: "Custom branding" },
-              { included: false, label: "Priority support" },
-            ].map((f) => (
-              <li key={f.label} className="flex items-center gap-2">
-                {f.included ? <Check className="w-4 h-4 text-emerald-400 shrink-0" /> : <X className="w-4 h-4 text-slate-600 shrink-0" />}
-                <span className={f.included ? "text-slate-300" : "text-slate-500"}>{f.label}</span>
-              </li>
-            ))}
-          </ul>
-          <button
-            onClick={() => handleCheckout(teamPriceId, "team")}
-            disabled={loading === "team" || !stripeConfigured}
-            className="w-full py-3 bg-white/5 border border-white/8 hover:border-white/15 text-white rounded-xl text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading === "team" ? "Loading..." : stripeConfigured ? "Get Team" : "Coming Soon"}
+        <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-violet-300">Team</p>
+          <div className="mt-4 text-5xl font-black text-white">$99<span className="text-base font-normal text-slate-500">/mo</span></div>
+          <p className="mt-3 text-sm text-slate-400">Built for multi-person launch operations.</p>
+          <ul className="my-7 space-y-3">{teamFeatures.map((f, i) => <PlanFeature key={f} label={f} included={i < 4} />)}</ul>
+          <button onClick={() => handleCheckout(teamPriceId, "team")} disabled={loading === "team" || !stripeConfigured} className="w-full rounded-xl border border-white/10 bg-white/5 py-3 text-sm font-semibold text-white transition hover:bg-white/10 disabled:cursor-not-allowed disabled:opacity-50">
+            {loading === "team" ? "Opening checkout..." : stripeConfigured ? "Get Team" : "Checkout unavailable"}
           </button>
         </div>
       </div>
-
-      <div className="mt-10 p-5 bg-[#0d1117] border border-white/6 rounded-2xl text-center">
-        <p className="text-slate-400 text-sm">
-          All plans include core launch management. Payments processed securely by Stripe.{" "}
-          <a href="/refund-policy" className="text-blue-400 hover:text-blue-300">Refund policy</a>
-        </p>
+      <div className="mt-10 flex flex-col items-center gap-2 rounded-3xl border border-emerald-500/15 bg-emerald-500/5 p-5 text-center sm:flex-row sm:justify-center">
+        <ShieldCheck className="h-4 w-4 text-emerald-300" />
+        <p className="text-sm text-slate-400">Payments processed securely by Stripe. <Link href="/refund-policy" className="text-blue-300 hover:text-blue-200">Refund policy</Link></p>
       </div>
     </>
   );

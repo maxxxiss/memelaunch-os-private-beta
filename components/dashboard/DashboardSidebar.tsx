@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,14 +17,14 @@ function NavItem({ icon: Icon, label, href, active }: { icon: React.ElementType;
     <Link
       href={href}
       className={cn(
-        "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-colors",
+        "group flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm transition-all",
         active
-          ? "bg-white/8 text-white font-medium"
-          : "text-slate-500 hover:text-slate-200 hover:bg-white/5"
+          ? "border border-blue-400/20 bg-blue-500/12 text-white shadow-lg shadow-blue-500/10"
+          : "text-slate-500 hover:bg-white/5 hover:text-slate-200"
       )}
     >
-      <Icon className="w-4 h-4 shrink-0" />
-      {label}
+      <Icon className="h-4 w-4 shrink-0" />
+      <span>{label}</span>
     </Link>
   );
 }
@@ -36,23 +36,25 @@ export function DashboardSidebar({ workspaceSlug, projectId, projectName }: Dash
   const isProject = !!projectId;
 
   return (
-    <aside className="w-56 shrink-0 bg-[#070b14] border-r border-white/8 flex-col hidden md:flex min-h-screen">
-      <div className="p-4 border-b border-white/8">
-        <Link href="/" className="text-sm font-bold text-white tracking-tight">MemeLaunch OS</Link>
-        <p className="text-xs text-slate-600 mt-0.5 truncate">/{workspaceSlug}</p>
+    <aside className="hidden min-h-screen w-64 shrink-0 border-r border-white/10 bg-[#050914]/95 md:flex md:flex-col">
+      <div className="border-b border-white/10 p-4">
+        <Link href="/" className="flex items-center gap-2 text-sm font-bold text-white">
+          <span className="grid h-8 w-8 place-items-center rounded-xl border border-blue-400/25 bg-blue-500/15 text-blue-200">M</span>
+          MemeLaunch OS
+        </Link>
+        <div className="mt-4 rounded-2xl border border-white/8 bg-white/[0.03] p-3">
+          <p className="text-[10px] uppercase tracking-widest text-slate-600">Workspace</p>
+          <p className="mt-1 truncate text-sm font-semibold text-slate-300">/{workspaceSlug}</p>
+        </div>
       </div>
-
-      <nav className="flex-1 p-2 space-y-0.5 overflow-y-auto pt-3">
+      <nav className="flex-1 space-y-1 overflow-y-auto p-3">
         <NavItem icon={LayoutDashboard} label="Dashboard" href={base} active={isDashboard} />
-
         {isProject && (
           <>
-            <div className="pt-4 pb-1 px-3">
-              <p className="text-[10px] text-slate-600 uppercase tracking-widest font-semibold">Current Project</p>
-            </div>
-            <div className="px-3 py-2 flex items-center gap-2">
-              <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
-              <span className="text-xs text-slate-400 truncate">{projectName ?? "Project"}</span>
+            <div className="px-3 pb-1 pt-5"><p className="text-[10px] font-semibold uppercase tracking-widest text-slate-600">Launch room</p></div>
+            <div className="mb-2 flex items-center gap-2 rounded-2xl border border-white/8 bg-white/[0.03] px-3 py-3">
+              <ChevronRight className="h-3 w-3 shrink-0 text-blue-300" />
+              <span className="truncate text-xs font-medium text-slate-300">{projectName ?? "Project"}</span>
             </div>
             <NavItem icon={CheckSquare} label="Checklist" href={`${base}/projects/${projectId}#checklist`} active={false} />
             <NavItem icon={ListTodo} label="Tasks" href={`${base}/projects/${projectId}#tasks`} active={false} />
@@ -61,10 +63,7 @@ export function DashboardSidebar({ workspaceSlug, projectId, projectName }: Dash
           </>
         )}
       </nav>
-
-      <div className="p-3 border-t border-white/8">
-        <SignOutButton />
-      </div>
+      <div className="border-t border-white/10 p-3"><SignOutButton /></div>
     </aside>
   );
 }

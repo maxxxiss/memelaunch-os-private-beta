@@ -13,10 +13,11 @@ const NAV_LINKS = [
 export function PublicNav() {
   const [open, setOpen] = useState(false);
   return (
-    <nav className="border-b border-white/8 bg-[#05070d]/90 backdrop-blur-sm sticky top-0 z-50 relative">
+    <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#05070d]/75 backdrop-blur-xl relative">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-        <Link href="/" className="text-sm font-bold text-white tracking-tight" onClick={() => setOpen(false)}>
-          MemeLaunch OS
+        <Link href="/" className="flex items-center gap-2 text-sm font-bold text-white tracking-tight" onClick={() => setOpen(false)}>
+          <span className="grid h-7 w-7 place-items-center rounded-lg border border-blue-400/25 bg-blue-500/15 text-blue-200">M</span>
+          <span>MemeLaunch OS</span>
         </Link>
         <div className="hidden md:flex items-center gap-6">
           {NAV_LINKS.map((l) => (
@@ -25,7 +26,7 @@ export function PublicNav() {
         </div>
         <div className="hidden md:flex items-center gap-3">
           <Link href="/login" className="text-sm text-slate-400 hover:text-white transition-colors">Sign in</Link>
-          <Link href="/register" className="px-4 py-2 bg-white text-[#05070d] rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors">
+          <Link href="/register" className="px-4 py-2 bg-white text-[#05070d] rounded-lg text-sm font-semibold shadow-lg shadow-blue-500/15 hover:bg-blue-50 transition-colors">
             Get started free
           </Link>
         </div>
@@ -34,7 +35,7 @@ export function PublicNav() {
         </button>
       </div>
       {open && (
-        <div className="absolute top-full left-0 right-0 bg-[#05070d] border-b border-white/8 px-6 pb-5 md:hidden z-50">
+        <div className="absolute top-full left-0 right-0 bg-[#05070d]/95 backdrop-blur-xl border-b border-white/8 px-6 pb-5 md:hidden z-50">
           <div className="flex flex-col pt-2">
             {NAV_LINKS.map((l) => (
               <Link key={l.href} href={l.href} onClick={() => setOpen(false)}

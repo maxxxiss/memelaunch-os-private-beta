@@ -2,6 +2,7 @@ import { env } from "@/lib/env";
 import { PricingCards } from "./PricingCards";
 import { PublicNav } from "@/components/public/PublicNav";
 import { PublicFooter } from "@/components/public/PublicFooter";
+import { SectionLabel, VisualShell } from "@/components/ui/premium";
 
 export default async function PricingPage({
   searchParams,
@@ -41,12 +42,13 @@ export default async function PricingPage({
   ];
 
   return (
-    <div className="min-h-screen bg-[#05070d]">
+    <VisualShell>
       <PublicNav />
-      <div className="max-w-5xl mx-auto px-6 py-24">
+      <div className="max-w-6xl mx-auto px-6 py-24">
         <header className="text-center mb-14">
-          <h1 className="text-4xl font-bold text-white tracking-tight mb-3">Simple pricing for launch teams</h1>
-          <p className="text-slate-400">Start free. Upgrade when you scale.</p>
+          <SectionLabel>Pricing</SectionLabel>
+          <h1 className="text-5xl font-black text-white tracking-[-0.05em] mb-4">Plans for serious launch operations</h1>
+          <p className="text-slate-400 max-w-xl mx-auto">Start free. Upgrade when your team needs more projects, workspaces, exports, and launch capacity.</p>
         </header>
 
         {!stripeConfigured && (
@@ -80,6 +82,6 @@ export default async function PricingPage({
         </div>
       </div>
       <PublicFooter />
-    </div>
+    </VisualShell>
   );
 }

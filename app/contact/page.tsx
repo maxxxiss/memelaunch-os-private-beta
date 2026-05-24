@@ -1,70 +1,41 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { PublicNav } from "@/components/public/PublicNav";
 import { PublicFooter } from "@/components/public/PublicFooter";
+import { GlowCard, SectionLabel, VisualShell } from "@/components/ui/premium";
 
 export const metadata = {
   title: "Contact — MemeLaunch OS",
   description: "Get in touch with the MemeLaunch OS team.",
 };
 
+const cards = [
+  { title: "General support", copy: "Account issues, product questions, and workspace support.", email: "support@memelaunch.app" },
+  { title: "Billing", copy: "Payment issues, refund requests, or subscription questions.", email: "billing@memelaunch.app" },
+];
+
 export default function ContactPage() {
   return (
-    <div className="min-h-screen bg-[#05070d]">
+    <VisualShell>
       <PublicNav />
-
-      <section className="max-w-2xl mx-auto px-6 pt-24 pb-20">
-        <h1 className="text-4xl font-bold text-white tracking-tight mb-4">Contact</h1>
-        <p className="text-slate-400 mb-12">
-          Have a question, issue, or feedback? We&apos;re here to help.
-        </p>
-
-        <div className="space-y-4">
-          <div className="bg-[#0b1020] border border-white/8 rounded-2xl p-6">
-            <h2 className="font-semibold text-white mb-2 text-sm uppercase tracking-wider">General support</h2>
-            <p className="text-sm text-slate-400 mb-3">
-              For account issues, billing questions, and general product support.
-            </p>
-            <a
-              href="mailto:support@memelaunch.app"
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              support@memelaunch.app
-            </a>
-          </div>
-
-          <div className="bg-[#0b1020] border border-white/8 rounded-2xl p-6">
-            <h2 className="font-semibold text-white mb-2 text-sm uppercase tracking-wider">Billing and subscriptions</h2>
-            <p className="text-sm text-slate-400 mb-3">
-              For payment issues, refund requests, or subscription changes.
-            </p>
-            <a
-              href="mailto:billing@memelaunch.app"
-              className="text-sm text-blue-400 hover:text-blue-300 transition-colors"
-            >
-              billing@memelaunch.app
-            </a>
-          </div>
-
-          <div className="bg-[#0b1020] border border-white/8 rounded-2xl p-6">
-            <h2 className="font-semibold text-white mb-2 text-sm uppercase tracking-wider">Response time</h2>
-            <p className="text-sm text-slate-400">
-              We aim to respond within 1–2 business days.
-            </p>
-          </div>
+      <section className="mx-auto max-w-5xl px-6 py-24">
+        <SectionLabel>Contact</SectionLabel>
+        <h1 className="max-w-3xl text-5xl font-black tracking-[-0.05em] text-white md:text-6xl">Support for launch teams using MemeLaunch OS.</h1>
+        <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">Questions, billing issues, or feedback? We aim to respond within 1–2 business days.</p>
+        <div className="mt-10 grid gap-5 md:grid-cols-2">
+          {cards.map((card) => (
+            <GlowCard key={card.title} className="p-7">
+              <h2 className="text-lg font-bold text-white">{card.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-slate-400">{card.copy}</p>
+              <a href={`mailto:${card.email}`} className="mt-6 inline-flex text-sm font-semibold text-blue-300 hover:text-blue-200">{card.email}</a>
+            </GlowCard>
+          ))}
         </div>
-
-        <p className="mt-10 text-xs text-slate-600">
-          MemeLaunch OS does not provide financial advice or investment guidance. All support is for platform usage only.
-        </p>
-
-        <div className="mt-8">
-          <Link href="/" className="text-sm text-slate-400 hover:text-white transition-colors">
-            ← Back to home
-          </Link>
-        </div>
+        <GlowCard className="mt-5 p-6">
+          <p className="text-sm text-slate-400">MemeLaunch OS does not provide financial advice or investment guidance. Support is for platform usage only.</p>
+          <div className="mt-5 flex flex-wrap gap-4 text-sm"><Link href="/pricing" className="text-blue-300 hover:text-blue-200">Pricing</Link><Link href="/terms" className="text-blue-300 hover:text-blue-200">Terms</Link><Link href="/refund-policy" className="text-blue-300 hover:text-blue-200">Refund policy</Link></div>
+        </GlowCard>
       </section>
-
       <PublicFooter />
-    </div>
+    </VisualShell>
   );
 }

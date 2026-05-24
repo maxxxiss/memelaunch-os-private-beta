@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { Rocket } from "lucide-react";
+﻿import { Rocket } from "lucide-react";
+import { GlowCard, PremiumCTA, ReadinessGauge } from "@/components/ui/premium";
 
 interface LaunchReadinessHeroProps {
   score: number;
@@ -12,102 +12,52 @@ interface LaunchReadinessHeroProps {
 
 function KpiTile({ label, value, sub }: { label: string; value: string; sub: string }) {
   return (
-    <div className="bg-white/4 border border-white/6 rounded-xl p-3.5">
-      <p className="text-xs text-slate-400 uppercase tracking-widest font-medium mb-1.5" style={{ fontSize: "10px" }}>{label}</p>
-      <p className="text-sm font-bold text-white truncate" title={value}>{value}</p>
-      <p className="text-xs text-slate-400 truncate mt-0.5">{sub}</p>
+    <div className="rounded-2xl border border-white/8 bg-white/[0.035] p-4">
+      <p className="mb-2 text-[10px] font-semibold uppercase tracking-widest text-slate-500">{label}</p>
+      <p className="truncate text-lg font-bold text-white" title={value}>{value}</p>
+      <p className="mt-1 truncate text-xs text-slate-500">{sub}</p>
     </div>
   );
 }
 
-const scoreAccent = (s: number) =>
-  s >= 75 ? "text-emerald-400" : s >= 40 ? "text-blue-400" : "text-slate-400";
-
-const scoreBar = (s: number) =>
-  s >= 75 ? "bg-emerald-500" : s >= 40 ? "bg-blue-500" : "bg-slate-600";
-
 const scoreLabel = (s: number) =>
   s >= 80 ? "Ready to launch" : s >= 50 ? "Getting closer" : s >= 25 ? "In progress" : "Just getting started";
 
-export function LaunchReadinessHero({
-  score,
-  activeProject,
-  checklistProgress,
-  openTasksCount,
-  scheduledContentCount,
-  slug,
-}: LaunchReadinessHeroProps) {
-  const checklistPct =
-    checklistProgress.total > 0
-      ? Math.round((checklistProgress.completed / checklistProgress.total) * 100)
-      : 0;
+export function LaunchReadinessHero({ score, activeProject, checklistProgress, openTasksCount, scheduledContentCount, slug }: LaunchReadinessHeroProps) {
+  const checklistPct = checklistProgress.total > 0 ? Math.round((checklistProgress.completed / checklistProgress.total) * 100) : 0;
 
   if (!activeProject) {
     return (
-      <div className="relative overflow-hidden bg-[#080d18] border border-blue-500/12 rounded-2xl p-8 mb-5 text-center">
-        <div className="absolute top-0 right-0 w-72 h-72 bg-blue-600/7 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-        <div className="relative">
-          <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center mx-auto mb-4">
-            <Rocket className="w-5 h-5 text-blue-400" />
-          </div>
-          <h2 className="text-lg font-bold text-white mb-2">Start your first launch</h2>
-          <p className="text-sm text-slate-400 mb-6 max-w-sm mx-auto">Create a project to track readiness, assign tasks, and plan your launch content.</p>
-          <Link href={`/app/${slug}/new-project`} className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-sm transition-colors glow-blue">
-            <Rocket className="w-4 h-4" />
-            Create your first project
-          </Link>
+      <GlowCard className="mb-5 p-8 text-center md:p-12">
+        <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-2xl border border-blue-400/25 bg-blue-500/15">
+          <Rocket className="h-6 w-6 text-blue-300" />
         </div>
-      </div>
+        <h2 className="text-3xl font-black tracking-[-0.04em] text-white">Create your first launch project</h2>
+        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-slate-400">Turn your workspace into a launch command center with a checklist, tasks, content schedule, links, and readiness score.</p>
+        <div className="mt-7"><PremiumCTA href={`/app/${slug}/new-project`}>Create first project</PremiumCTA></div>
+      </GlowCard>
     );
   }
 
   return (
-    <div className="relative overflow-hidden bg-[#080d18] border border-blue-500/12 rounded-2xl p-7 mb-5">
-      {/* Subtle background glow */}
-      <div className="absolute top-0 right-0 w-72 h-72 bg-blue-600/7 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" />
-      <div className="absolute bottom-0 left-1/3 w-52 h-52 bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
-
-      <div className="relative flex flex-col md:flex-row md:items-center gap-7">
-        {/* Score */}
-        <div className="shrink-0">
-          <p className="text-[10px] text-slate-500 uppercase tracking-[0.15em] font-semibold mb-2">Launch Readiness</p>
-          <div className="flex items-end gap-2 mb-3">
-            <span className={`text-6xl font-bold leading-none tabular-nums ${scoreAccent(score)}`}>{score}</span>
-            <span className="text-2xl text-slate-500 mb-1">%</span>
-          </div>
-          <div className="w-48 bg-white/5 rounded-full h-1.5 mb-2">
-            <div className={`h-1.5 rounded-full transition-all ${scoreBar(score)}`} style={{ width: `${score}%` }} />
-          </div>
-          <p className="text-xs text-slate-500">{scoreLabel(score)}</p>
+    <GlowCard className="mb-5 p-6 md:p-8">
+      <div className="grid gap-7 lg:grid-cols-[180px_1fr] lg:items-center">
+        <div className="flex flex-col items-center lg:items-start">
+          <ReadinessGauge score={score} />
+          <p className="mt-4 text-sm font-semibold text-white">{scoreLabel(score)}</p>
         </div>
-
-        {/* Divider */}
-        <div className="hidden md:block w-px h-20 bg-white/8 shrink-0" />
-
-        {/* KPI tiles */}
-        <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-3">
-          <KpiTile
-            label="Active Project"
-            value={activeProject?.name ?? "—"}
-            sub={activeProject ? `$${activeProject.ticker}` : "No project yet"}
-          />
-          <KpiTile
-            label="Checklist"
-            value={`${checklistProgress.completed}/${checklistProgress.total}`}
-            sub={`${checklistPct}% complete`}
-          />
-          <KpiTile
-            label="Open Tasks"
-            value={String(openTasksCount)}
-            sub={openTasksCount === 0 ? "All clear" : "Need attention"}
-          />
-          <KpiTile
-            label="Scheduled Content"
-            value={String(scheduledContentCount)}
-            sub={scheduledContentCount === 0 ? "None planned" : "Items in calendar"}
-          />
+        <div>
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-300">Launch command status</p>
+          <h2 className="mt-3 text-3xl font-black tracking-[-0.04em] text-white">{activeProject.name}</h2>
+          <p className="mt-1 font-mono text-sm text-blue-300">${activeProject.ticker}</p>
+          <div className="mt-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+            <KpiTile label="Checklist" value={`${checklistProgress.completed}/${checklistProgress.total}`} sub={`${checklistPct}% complete`} />
+            <KpiTile label="Open Tasks" value={String(openTasksCount)} sub={openTasksCount === 0 ? "All clear" : "Need attention"} />
+            <KpiTile label="Scheduled" value={String(scheduledContentCount)} sub="Content items" />
+            <KpiTile label="Next Step" value={openTasksCount > 0 ? "Tasks" : "Content"} sub="Recommended focus" />
+          </div>
         </div>
       </div>
-    </div>
+    </GlowCard>
   );
 }

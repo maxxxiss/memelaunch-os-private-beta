@@ -1,74 +1,41 @@
-import Link from "next/link";
+﻿import Link from "next/link";
 import { PublicNav } from "@/components/public/PublicNav";
 import { PublicFooter } from "@/components/public/PublicFooter";
+import { GlowCard, PremiumCTA, SectionLabel, VisualShell } from "@/components/ui/premium";
 
 export const metadata = {
   title: "About — MemeLaunch OS",
   description: "MemeLaunch OS is built for teams that need structure before launch chaos starts.",
 };
 
+const isList = ["Launch planning and coordination", "Team tasks and checklist execution", "Content scheduling and link control", "Readiness tracking before launch"];
+const notList = ["Financial or investment advice", "Trading, sniper, or bot automation", "Token issuance or legal compliance", "A guarantee of any launch outcome"];
+
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#05070d]">
+    <VisualShell>
       <PublicNav />
-
-      <section className="max-w-3xl mx-auto px-6 pt-24 pb-20">
-        <h1 className="text-4xl font-bold text-white tracking-tight mb-6">About MemeLaunch OS</h1>
-
-        <div className="space-y-6 text-slate-400 leading-relaxed">
-          <p className="text-lg text-slate-300">
-            MemeLaunch OS is built for teams that need structure before launch chaos starts.
-          </p>
-          <p>
-            Most memecoin launches fail not because of the token — but because of the team. Missed deadlines, scattered tasks in a Telegram group, last-minute content scrambles, forgotten checklist items. MemeLaunch OS gives your team one place to run the launch properly.
-          </p>
-          <p>
-            We built a launch operating system: structured workspaces, project tracking, pre-launch checklists, task boards, content schedulers, and launch readiness scores — all designed around how crypto teams actually operate.
-          </p>
-          <p>
-            MemeLaunch OS is planning and coordination software. It is not financial advice, not investment advice, and not a token issuance or legal compliance service. It does not guarantee launch success, token performance, volume, or community growth.
-          </p>
+      <section className="mx-auto max-w-5xl px-6 py-24">
+        <SectionLabel>About</SectionLabel>
+        <h1 className="max-w-3xl text-5xl font-black leading-none tracking-[-0.05em] text-white md:text-6xl">Built for teams that need structure before launch chaos starts.</h1>
+        <div className="mt-10 grid gap-5 lg:grid-cols-[1.1fr_0.9fr]">
+          <GlowCard className="p-8">
+            <p className="text-lg leading-8 text-slate-300">MemeLaunch OS gives crypto launch teams one place to plan projects, track readiness, assign tasks, schedule content, and keep operational context visible.</p>
+            <p className="mt-5 text-sm leading-7 text-slate-400">Most launch teams do not need more noise. They need one operating layer that shows what is ready, what is missing, and who owns the next step.</p>
+            <div className="mt-8"><PremiumCTA href="/register">Start free</PremiumCTA></div>
+          </GlowCard>
+          <GlowCard className="p-8">
+            <p className="text-sm font-bold uppercase tracking-widest text-blue-300">Product boundary</p>
+            <p className="mt-4 text-sm leading-7 text-slate-400">MemeLaunch OS is planning and coordination software. It is not financial advice, not a trading product, and not a guarantee of token performance, volume, or community growth.</p>
+            <Link href="/contact" className="mt-6 inline-flex text-sm font-semibold text-blue-300 hover:text-blue-200">Contact support</Link>
+          </GlowCard>
         </div>
-
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-6 bg-[#0b1020] border border-white/8 rounded-2xl">
-            <h2 className="font-semibold text-white mb-3 text-sm uppercase tracking-wider">What we are</h2>
-            <ul className="space-y-2 text-sm text-slate-400">
-              <li>— A launch planning and coordination platform</li>
-              <li>— A team task and checklist system</li>
-              <li>— A content scheduling tool</li>
-              <li>— A readiness tracking dashboard</li>
-            </ul>
-          </div>
-
-          <div className="p-6 bg-[#0b1020] border border-white/8 rounded-2xl">
-            <h2 className="font-semibold text-white mb-3 text-sm uppercase tracking-wider">What we are not</h2>
-            <ul className="space-y-2 text-sm text-slate-400">
-              <li>— Financial or investment advice</li>
-              <li>— A trading bot, sniper, or automation tool</li>
-              <li>— A token issuance or legal compliance service</li>
-              <li>— A guarantee of any launch outcome</li>
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-12 flex gap-4">
-          <Link
-            href="/register"
-            className="px-6 py-3 bg-white text-[#05070d] rounded-xl font-semibold text-sm hover:bg-slate-200 transition-colors"
-          >
-            Start free
-          </Link>
-          <Link
-            href="/contact"
-            className="px-6 py-3 bg-white/5 border border-white/10 text-white rounded-xl font-medium text-sm hover:bg-white/10 transition-colors"
-          >
-            Contact us
-          </Link>
+        <div className="mt-5 grid gap-5 md:grid-cols-2">
+          <GlowCard className="p-6"><h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-emerald-300">What we are</h2><ul className="space-y-3 text-sm text-slate-400">{isList.map((item) => <li key={item}>{item}</li>)}</ul></GlowCard>
+          <GlowCard className="p-6"><h2 className="mb-4 text-sm font-bold uppercase tracking-widest text-violet-300">What we are not</h2><ul className="space-y-3 text-sm text-slate-400">{notList.map((item) => <li key={item}>{item}</li>)}</ul></GlowCard>
         </div>
       </section>
-
       <PublicFooter />
-    </div>
+    </VisualShell>
   );
 }

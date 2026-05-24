@@ -107,10 +107,10 @@ export default async function WorkspacePage({
       <DashboardSidebar workspaceSlug={workspace.slug} />
 
       <main className="flex-1 overflow-auto">
-        <header className="sticky top-0 z-10 bg-[#05070d]/90 backdrop-blur-sm border-b border-white/8 px-8 py-4 flex justify-between items-center">
+        <header className="sticky top-0 z-10 bg-[#05070d]/85 backdrop-blur-xl border-b border-white/10 px-5 py-4 md:px-8 flex justify-between items-center">
           <div>
             <h1 className="text-lg font-bold text-white tracking-tight">Dashboard</h1>
-            <p className="text-xs text-slate-500">{workspace.name}</p>
+            <p className="text-xs text-slate-500">Launch command center · {workspace.name}</p>
           </div>
           <div className="flex items-center gap-3">
             <PlanBadge plan={effectivePlan} />
@@ -118,7 +118,7 @@ export default async function WorkspacePage({
           </div>
         </header>
 
-        <div className="px-8 py-8">
+        <div className="px-5 py-6 md:px-8 md:py-8">
           {checkout === "success" && <CheckoutSuccessMessage />}
           <LaunchReadinessHero
             score={launchReadiness}

@@ -6,6 +6,16 @@ Format: Keep a Changelog · Versions: SemVer.
 ## [Unreleased]
 
 ### Added
+- Premium product design system (VisualShell, GlowCard, SectionLabel, StatusChip, ReadinessGauge, PremiumCTA)
+- Homepage full redesign with command-center hero visual, chaos-vs-system, feature modules, workflow pipeline, pricing teaser, FAQ, final CTA
+- Public pages redesign (features, about, contact) with unified premium brand system
+- Pricing page upgraded with VisualShell and enhanced Pro highlight
+- Public navigation upgraded with branded M logo and premium CTA
+- App shell redesign: sidebar with workspace identity, dashboard header with command-center copy
+- Dashboard hero redesigned with ReadinessGauge, KPI tiles, and launch room context
+- Dashboard projects grid redesigned with premium cards and status chips
+- Project detail page redesigned with launch room hero, gradient background, mobile spacing, and rounded-3xl sections
+- Forms redesigned with GlowCard, SectionLabel, ErrorMessage, and premium CTAs (workspace, task, content, launch project)
 - Project baseline (README, .env.example, package.json, configs)
 - Tailwind CSS with semantic tokens
 - Supabase client structure

@@ -112,7 +112,7 @@ export default async function ProjectDetailPage({
 
       <main className="flex-1 overflow-auto">
         {/* Sticky header */}
-        <header className="sticky top-0 z-10 bg-[#05070d]/90 backdrop-blur-sm border-b border-white/8 px-8 py-4 flex items-center justify-between">
+        <header className="sticky top-0 z-10 bg-[#05070d]/85 backdrop-blur-xl border-b border-white/10 px-5 py-4 md:px-8 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href={`/app/${slug}`} className="text-xs text-slate-500 hover:text-slate-300 transition-colors">← Dashboard</Link>
             <span className="text-slate-700">/</span>
@@ -127,13 +127,14 @@ export default async function ProjectDetailPage({
           </div>
         </header>
 
-        <div className="px-8 py-8 max-w-5xl">
-          {/* Project identity hero */}
+        <div className="px-5 py-6 md:px-8 md:py-8 max-w-6xl">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-6 md:col-span-2">
+            <div className="relative overflow-hidden bg-gradient-to-br from-blue-500/10 via-[#0d1117] to-violet-500/10 border border-blue-400/20 rounded-3xl p-6 md:col-span-2 shadow-2xl shadow-blue-500/10">
+              <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-500/15 blur-3xl" />
               <div className="flex items-start justify-between mb-5">
                 <div>
-                  <h2 className="text-xl font-bold text-white mb-1">{project.name}</h2>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-blue-300 font-bold mb-3">Launch room</p>
+                  <h2 className="text-3xl font-black tracking-[-0.04em] text-white mb-1">{project.name}</h2>
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-mono text-blue-400">${project.ticker}</span>
                     <span className="text-slate-700">·</span>
@@ -141,7 +142,7 @@ export default async function ProjectDetailPage({
                   </div>
                 </div>
               </div>
-              <div className="flex gap-6">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
                   <p className="text-[10px] text-slate-500 uppercase tracking-widest mb-1">Readiness</p>
                   <p className={`text-2xl font-bold ${scoreColor(readiness.totalScore)}`}>{readiness.totalScore}%</p>
@@ -157,14 +158,14 @@ export default async function ProjectDetailPage({
               </div>
             </div>
             <div className="space-y-3">
-              <div className="bg-[#0d1117] border border-white/8 rounded-xl p-4">
+              <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-4">
                 <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Checklist</p>
                 <p className="text-xl font-bold text-white">{completed}<span className="text-sm text-slate-500">/{total}</span></p>
                 <div className="w-full bg-white/5 rounded-full h-1 mt-2">
                   <div className={`${barColor(readinessPct)} h-1 rounded-full`} style={{ width: `${readinessPct}%` }} />
                 </div>
               </div>
-              <div className="bg-[#0d1117] border border-white/8 rounded-xl p-4">
+              <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-4">
                 <p className="text-xs text-slate-500 uppercase tracking-widest mb-1">Launch Date</p>
                 <p className="text-sm font-semibold text-white">{project.launch_date ? new Date(project.launch_date).toLocaleDateString() : <span className="text-slate-600">Not set</span>}</p>
               </div>
@@ -172,14 +173,13 @@ export default async function ProjectDetailPage({
           </div>
 
           {project.description && (
-            <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-6 mb-8">
+            <div className="bg-[#0d1117] border border-white/8 rounded-3xl p-6 mb-8">
               <p className="text-xs text-slate-500 uppercase tracking-widest mb-2">About</p>
               <p className="text-sm text-slate-400 leading-relaxed">{project.description}</p>
             </div>
           )}
 
-          {/* Checklist */}
-          <div id="checklist" className="bg-[#0d1117] border border-white/8 rounded-2xl p-6 mb-6">
+          <div id="checklist" className="bg-[#0d1117] border border-white/8 rounded-3xl p-5 md:p-6 mb-6">
             <div className="flex items-center justify-between mb-6">
               <div>
                 <h2 className="font-semibold text-white">Launch Checklist</h2>
@@ -193,16 +193,15 @@ export default async function ProjectDetailPage({
             <ProjectChecklist projectId={projectId} items={checklist} />
           </div>
 
-          {/* Tasks + Content */}
           <div id="tasks" className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-            <div className="bg-[#0d1117] border border-white/8 rounded-2xl p-6">
+            <div className="bg-[#0d1117] border border-white/8 rounded-3xl p-5 md:p-6">
               <h2 className="font-semibold text-white mb-4">Tasks</h2>
               <TaskList tasks={tasks} />
               <div className="mt-5 pt-5 border-t border-white/8">
                 <CreateTaskForm workspaceId={workspace.id} workspaceSlug={workspace.slug} projectId={projectId} />
               </div>
             </div>
-            <div id="content" className="bg-[#0d1117] border border-white/8 rounded-2xl p-6">
+            <div id="content" className="bg-[#0d1117] border border-white/8 rounded-3xl p-5 md:p-6">
               <h2 className="font-semibold text-white mb-4">Content Plan</h2>
               <ContentList items={contentItems} />
               <div className="mt-5 pt-5 border-t border-white/8">
@@ -211,7 +210,6 @@ export default async function ProjectDetailPage({
             </div>
           </div>
 
-          {/* Readiness + Links */}
           <div id="readiness" className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
             <ReadinessBreakdown breakdown={readiness} />
             <ProjectLinks projectId={projectId} workspaceId={workspace.id} workspaceSlug={workspace.slug} links={links} />
